@@ -1,0 +1,15 @@
+#!/bin/bash
+# Wrapper for cmcompiler
+
+call=$1
+DIR="/usr/share/cmcompiler/prog"
+
+if [ "$call" == "--compile" ]; then
+	python $DIR/build.py
+elif [ "$call" == "--sync" ]; then
+	python $DIR/sync.py
+elif [ "$call" == "--download" ]; then
+	python $DIR/dl_dialog.py
+else
+	python $DIR/cmcompiler.py
+fi
