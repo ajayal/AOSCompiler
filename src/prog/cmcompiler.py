@@ -68,6 +68,17 @@ class cmcStartClass():
 	# Main program
 	def main(self):
 
+		if not os.path.exists(askConfirm):
+			get_askConfirm()
+
+		if not os.path.exists(gitconfig):
+			set_git_Text()
+
+		cmd = "python /usr/share/cmcompiler/prog/chkPackages.py"
+		i = os.system(cmd)
+		if i == 256:
+			exit()
+
    		def menuItem(parent, imageNam, num):
        			num = gtk.HBox(False, 0)
        			num.set_border_width(2)
@@ -180,17 +191,6 @@ class cmcStartClass():
 if __name__ == '__main__':
 
 	chk_config()
-
-	if not os.path.exists(askConfirm):
-		get_askConfirm()
-
-	if not os.path.exists(gitconfig):
-		set_git_Text()
-
-	cmd = "python /usr/share/cmcompiler/prog/chkPackages.py"
-	i = os.system(cmd)
-	if i == 256:
-		exit()
 
 	try:
 		pro = sys.argv[1]
