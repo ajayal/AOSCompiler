@@ -1,7 +1,7 @@
 #!/bin/bash
 # Lithid
 
-ARG=$!
+ARG=$1
 
 PID=$(ps -ef |grep "/usr/share/cmcompiler/prog/$ARG.py" |grep -v grep |awk '{print $2}')
 echo "$PID"
