@@ -103,9 +103,15 @@ def chk_config():
 	if not os.path.exists(configdir):
 		os.makedirs(configdir)
 
-def getManu(arg):
+def getManu(arg, br):
 	s = None
-	paths = glob("device/*/*/cm.mk")
+	if br == "gb":
+		paths = glob("device/*/*/device.mk")
+	elif br == "ics":
+		paths = glob("device/*/*/cm.mk")
+	else:
+		paths = None
+
 	for x in paths:
 		if arg in x:
 			s = x.split("/")

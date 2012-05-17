@@ -115,7 +115,7 @@ def repo_build_go():
 		if os.path.exists(e):
 			os.remove(e)
 		CHECKS = 0
-		build_manu = getManu(build_device)
+		build_manu = getManu(build_device, "gb")
 		d = "%s/.repo" % (repo_path)
 		if not os.path.exists(d):
 			CHECKS+=1
@@ -170,7 +170,7 @@ def repo_build_go():
 		if os.path.exists(e):
 			os.remove(e)
 		CHECKS = 0
-		build_manu = getManu(build_device)
+		build_manu = getManu(build_device, "ics")
 
 		d = "%s/.repo" % (repo_path)
 		print d
