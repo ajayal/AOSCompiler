@@ -1,0 +1,34 @@
+cmcompiler (0.4) unstable; urgency=low
+
+  * Compile and sync bugfixes
+  * Added download for nightly, RC and stable roms
+
+ -- lithid <long.jeremie@gmail.com>  Sat, 01 May 2012 10:02:03 -0400
+
+cmcompiler (0.3) unstable; urgency=low
+
+  * Removed Ubuntu 10.10 support
+  * Fixed config folder on startup if not exists
+  * Fixed padding on default app to be dynamic when unity isn't using global menu
+  * Removed resizing on more dialogs
+  * Added right click unity launcher support
+  * Added indicators (blue=complete red=error white=running)
+  * Threading is enabled for indicators
+  * Added compile button to sync indicator after sync is complete
+  * Added open button to open the file manager where your rom is located
+  * Cmc uses compiled python code now
+
+ -- lithid <long.jeremie@gmail.com>  Sat, 28 Apr 2012 08:03:17 -0400
+
+cmcompiler (0.2) unstable; urgency=low
+
+  * Fixed issue where paths were not working for compile script
+  * Fixed path issues when using custom repo path
+
+ -- lithid <long.jeremie@gmail.com>  Sun, 25 Apr 2012 21:35:27 -0400
+
+cmcompiler (0.1) unstable; urgency=low
+
+  * Initial release (Closes: #nnnn)  <nnnn is the bug number of your ITP>
+
+ -- lithid <long.jeremie@gmail.com>  Sun, 08 Apr 2012 00:13:27 -0400
