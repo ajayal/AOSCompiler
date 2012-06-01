@@ -1,11 +1,11 @@
-cmcompiler (0.4) unstable; urgency=low
+cmcompiler-daily (0.4) unstable; urgency=low
 
   * Compile and sync bugfixes
   * Added download for nightly, RC and stable roms
 
  -- lithid <long.jeremie@gmail.com>  Sat, 01 May 2012 10:02:03 -0400
 
-cmcompiler (0.3) unstable; urgency=low
+cmcompiler-daily (0.3) unstable; urgency=low
 
   * Removed Ubuntu 10.10 support
   * Fixed config folder on startup if not exists
@@ -20,14 +20,14 @@ cmcompiler (0.3) unstable; urgency=low
 
  -- lithid <long.jeremie@gmail.com>  Sat, 28 Apr 2012 08:03:17 -0400
 
-cmcompiler (0.2) unstable; urgency=low
+cmcompiler-daily (0.2) unstable; urgency=low
 
   * Fixed issue where paths were not working for compile script
   * Fixed path issues when using custom repo path
 
  -- lithid <long.jeremie@gmail.com>  Sun, 25 Apr 2012 21:35:27 -0400
 
-cmcompiler (0.1) unstable; urgency=low
+cmcompiler-daily (0.1) unstable; urgency=low
 
   * Initial release (Closes: #nnnn)  <nnnn is the bug number of your ITP>
 

@@ -1,6 +1,5 @@
-src/cmcompiler usr/bin/
-src/prog/*.py usr/share/cmcompiler/prog/
-src/prog/scripts/* usr/share/cmcompiler/prog/scripts/
-src/images/* usr/share/cmcompiler/images/
-src/desktop/* usr/share/applications/
-src/manpage/* usr/share/man/man7/
+bin/cmcompiler usr/bin/
+share/scripts/* usr/share/cmcompiler/scripts/
+share/images/* usr/share/cmcompiler/images/
+share/desktop/* usr/share/applications/
+share/manpage/* usr/share/man/man7/

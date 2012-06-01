@@ -1,0 +1,162 @@
+#!/usr/bin/env python
+
+#   CMCompiler is free software. It comes without any warranty, to
+#   the extent permitted by applicable law. You can redistribute it
+#   and/or modify it under the terms of the Do What The Fuck You Want
+#   To Public License, Version 2, as published by Sam Hocevar. See
+#   http://sam.zoy.org/wtfpl/COPYING for more details.
+
+from cmcompiler import *
+
+UIm = "/usr/share/cmcompiler/images"
+Slide1 = "%s/cm.png" % UIm
+Slide2 = "%s/cm2.png" % UIm
+
+Pages = gtk.Notebook()
+PreButton = gtk.Button()
+NextButton = gtk.Button()
+
+class WalkThrough():
+
+    def next_callback(self, widget):
+	Pages.next_page()
+	current = Pages.get_current_page()
+	if not current == 0:
+		PreButton.set_sensitive(True)
+		PreButton.set_label("Previous")
+		NextButton.set_label("Next")
+	else:
+		PreButton.set_sensitive(False)
+
+    def prev_callback(self, widget):
+	Pages.prev_page()
+	current = Pages.get_current_page()
+	if not current == 0:
+		PreButton.set_sensitive(True)
+		PreButton.set_label("Previous")
+	else:
+		NextButton.set_label("Start")
+		PreButton.set_label("Click start to begin")
+		PreButton.set_sensitive(False)
+
+    def main_quit(self, widget, event=None):
+        gtk.main_quit()
+        return False
+
+    def __init__(self):
+        MainAppWindow = gtk.Window()
+	MainAppWindow.set_title("Cyanogenmod Compiler")
+	MainAppWindow.set_icon(placeIcon)
+        MainAppWindow.connect("delete_event", self.main_quit)
+        MainAppWindow.set_border_width(10)
+
+	vbox = gtk.VBox(False, 0)
+        table = gtk.Table(3, 6, False)
+
+        # Create a new notebook, place the position of the tabs
+        table.attach(Pages, 0,6,0,1)
+        Pages.show()
+        Pages.set_show_border(True)
+	Pages.set_show_tabs(False)
+
+	# Creating a menu bar
+	menu_bar_file = gtk.Menu()
+
+	menu_setup = gtk.MenuItem("Setup")
+	menu_bar_file.append(menu_setup)
+	menu_setup.connect("activate", self.main_quit)
+	menu_setup.show()
+
+	menu_dl = gtk.MenuItem("Download")
+	menu_bar_file.append(menu_dl)
+	menu_dl.connect("activate", self.main_quit)
+	menu_dl.show()
+
+	menu_close = gtk.MenuItem("Close")
+	menu_bar_file.append(menu_close)
+	menu_close.connect("activate",  self.main_quit)
+	menu_close.show()
+
+	file_menu = gtk.MenuItem("File")
+	file_menu.set_submenu(menu_bar_file)
+
+	menu_bar_help = gtk.Menu()
+
+	help_menu = gtk.MenuItem("Help")
+	help_menu.set_submenu(menu_bar_help)
+
+	menu_walk = gtk.MenuItem("Walkthrough")
+	menu_bar_help.append(menu_walk)
+	menu_walk.connect("activate", self.main_quit)
+	menu_walk.show()
+
+	menu_about = gtk.MenuItem("About")
+	menu_bar_help.append(menu_about)
+	menu_about.connect("activate", self.main_quit)
+	menu_about.show()
+
+	menu_bar = gtk.MenuBar()
+	menu_bar.show()
+	menu_bar.append(file_menu)
+	menu_bar.append(help_menu)
+
+        # Frame 1
+        frame1 = gtk.Frame()
+        frame1.set_border_width(10)
+        frame1.set_size_request(640, 479)
+        frame1.show()
+
+	event1 = gtk.EventBox()
+	image1 = gtk.Image()
+	image1.set_from_file(Slide1)
+	event1.add(image1)
+        frame1.add(event1)
+	image1.show()
+	event1.show()
+        Pages.append_page(frame1)
+
+        # Frame 2
+        frame2 = gtk.Frame()
+        frame2.set_border_width(10)
+        frame2.set_size_request(640, 479)
+        frame2.show()
+
+	event2 = gtk.EventBox()
+	image2 = gtk.Image()
+	image2.set_from_file(Slide2)
+	event2.add(image2)
+        frame2.add(event2)
+	image2.show()
+	event2.show()
+        Pages.append_page(frame2)
+    
+        # Set what page to start at (page 1)
+        Pages.set_current_page(0)
+
+	PreButton.set_label("Click start to begin")
+	PreButton.set_size_request(150, 28)
+        PreButton.connect("clicked", self.prev_callback)
+	PreButton.set_sensitive(False)
+        table.attach(PreButton, 1,2,1,2, xpadding=10, ypadding=10)
+	PreButton.show()
+
+	NextButton.set_label("Start")
+	NextButton.set_size_request(150, 28)
+        NextButton.connect("clicked", self.next_callback)
+        table.attach(NextButton, 2,3,1,2, xpadding=10, ypadding=10)
+        NextButton.show()
+
+	vbox.pack_start(table, False, False, 0)
+	vbox.pack_start(menu_bar, False, False, 0)
+	MainAppWindow.add(vbox)
+	table.show()
+        MainAppWindow.show_all()
+
+def main():
+	gtk.main()
+	return 0
+
+if __name__ == "__main__":
+	WalkThrough()
+	main()
+
