@@ -1,3 +1,13 @@
+cmcompiler-daily (0.5) unstable; urgency=low
+
+  * New graphics by SavocaFTW
+  * Started gerrit menu item
+  * Using both bash and python
+  * Added python-vte for terminal emulator
+  * Rewrote for stablity
+
+ -- lithid <long.jeremie@gmail.com>  Thu, 31 May 2012 08:55:55 -0400
+
 cmcompiler-daily (0.4) unstable; urgency=low
 
   * Compile and sync bugfixes
