@@ -62,6 +62,7 @@ myFORUM_URL = "http://forum.xda-developers.com/showthread.php?t=1415661"
 myDONATE = "http://forum.xda-developers.com/donatetome.php?u=2709018"
 myCM_URL = "https://github.com/CyanogenMod"
 myCM_RAW_URL = "https://raw.github.com/CyanogenMod"
+myCM_JB_URL = "%s/android_vendor_cm/jellybean/vendorsetup.sh" % myCM_RAW_URL
 myCM_ICS_URL = "%s/android_vendor_cm/ics/vendorsetup.sh" % myCM_RAW_URL
 myCM_GB_URL = "%s/android_vendor_cyanogen/gingerbread/vendorsetup.sh" % myCM_RAW_URL
 myINIT_URL = "https://github.com/CyanogenMod/android.git"
@@ -104,6 +105,7 @@ branches are not stable and shouldn't be thought of as such. Both branches that 
 are available here are development branches. Please keep this in mind when \n\
 choosing to run this compiler.\n\n\
 Branches info:\n\n\
+<b>jellybean</b> = This is the CM10 branch of CM based off of jellybean\n\n\
 <b>ics</b> = This branch is the current development branch from CM9. Use with caution.\n\n\
 <b>gingerbread</b> = is the current development branch for CM7. This branch tends to \n\
 be more stable then the CM9/ics branch.\n\n\
@@ -270,15 +272,16 @@ def getManu(arg, br):
 	s = None
 	if br == "gb":
 		paths = glob("device/*/*/device.mk")
-	elif br == "ics":
+	elif br == "ics" or br == "jellybean":
 		paths = glob("device/*/*/cm.mk")
 	else:
 		paths = None
 
-	for x in paths:
-		if arg in x:
-			s = x.split("/")
-			s = s[1]
+	if paths is not None:
+		for x in paths:
+			if arg in x:
+				s = x.split("/")
+				s = s[1]
 	if s:
 		return s
 	else:
@@ -580,7 +583,7 @@ def choose_branch(obj):
 	device = gtk.RadioButton(None, None)
 
 	button_count = 0
-	for radio in list(["ics", "gingerbread"]):
+	for radio in list(["ics", "gingerbread", "jellybean"]):
 
 		button_count += 1
 		button = "button%s" % (button_count)
@@ -677,6 +680,9 @@ def device_list(obj):
 		chk_config = 1
 	elif "ics" in b:
 		useBranch = myCM_ICS_URL
+		chk_config = 1
+	elif "jellybean" in b:
+		useBranch = myCM_JB_URL
 		chk_config = 1
 	else:
 		useBranch = "null"
@@ -967,11 +973,15 @@ class walkthrough():
 		BRANCH_RADIO_ICS.show()
 		BRANCH_RADIO_GB = gtk.RadioButton(group=BRANCH_RADIO, label="GB")
 		BRANCH_RADIO_GB.connect("toggled", callback_branch, "gingerbread")
-		BRANCH_RADIO_ICS.show()
+		BRANCH_RADIO_GB.show()
+		BRANCH_RADIO_JB = gtk.RadioButton(group=BRANCH_RADIO, label="JB")
+		BRANCH_RADIO_JB.connect("toggled", callback_branch, "jellybean")
+		BRANCH_RADIO_JB.show()
 		BRANCH_VBOX.pack_start(BRANCH_LABEL, True, True, 0)
-		BRANCH_TABLE = gtk.Table(1, 2, True)
-		BRANCH_TABLE.attach(BRANCH_RADIO_ICS, 0, 1, 0, 1, xoptions=gtk.EXPAND)
-		BRANCH_TABLE.attach(BRANCH_RADIO_GB, 1, 2, 0, 1, xoptions=gtk.EXPAND)
+		BRANCH_TABLE = gtk.Table(1, 3, True)
+		BRANCH_TABLE.attach(BRANCH_RADIO_GB, 0, 1, 0, 1, xoptions=gtk.EXPAND)
+		BRANCH_TABLE.attach(BRANCH_RADIO_ICS, 1, 2, 0, 1, xoptions=gtk.EXPAND)
+		BRANCH_TABLE.attach(BRANCH_RADIO_JB, 2, 3, 0, 1, xoptions=gtk.EXPAND)
         	BRANCH_VBOX.pack_start(BRANCH_TABLE, False, False, 0)
         	BRANCH_FRAME.add(BRANCH_VBOX)
 		BRANCH_VBOX.show()

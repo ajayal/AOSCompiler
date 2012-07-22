@@ -45,13 +45,12 @@ cd $repo_path
 echo "$branch"
 echo "$repo_cmd"
 if [ ! -d $repo_path/.repo ]; then
-        echo "0"
-        if [ "$branch" == "gingerbread" ]; then
-                echo "1"
-                $repo_cmd init -u https://github.com/CyanogenMod/android.git -b gingerbread
+		if [ "$branch" == "jellybean" ]; then
+				$repo_cmd init -u https://github.com/CyanogenMod/android.git -b jellybean
+        elif [ "$branch" == "gingerbread" ]; then
+        		$repo_cmd init -u https://github.com/CyanogenMod/android.git -b ics
         elif [ "$branch" == "ics" ]; then
-                echo "2"
-                $repo_cmd init -u https://github.com/CyanogenMod/android.git -b ics
+                $repo_cmd init -u https://github.com/CyanogenMod/android.git -b gingerbread
         else
                 echo "No branch selected, exiting"
                 exit 1

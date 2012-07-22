@@ -47,12 +47,21 @@ if [ ! -d vendor/$manuf/$device/proprietary ]; then
                 sh extract-files.sh
                 cd $repo_path
         else
+        		echo "vendor/$manuf/$device/proprietary does not exist and is needed"
                 echo "Adb is not running. Needed to extract-files"
-                exit 1
+                echo "or skip if you know what you are doing."
+                echo "type skip to skip this and continue, or enter to exit"
+                echo -n "> "
+                read response
+                if [ "$response" == "skip" ]; then
+                	echo "skipping this"
+                else
+                	exit 1
+               	fi
         fi
 fi
 
-if [ "$branch" == "ics" ]; then
+if [ "$branch" == "ics" ] || [ "$branch" == "jellybean" ]; then
         export USE_CCACHE=1
         if [ ! -f $CMC/cacheran ]; then
                 /bin/bash prebuilt/linux-x86/ccache/ccache -M 50G
