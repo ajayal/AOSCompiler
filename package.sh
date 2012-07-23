@@ -7,14 +7,19 @@ function install_fun() {
 
 	ver=$(grep "Version" share/desktop/${name}.desktop |cut -d"=" -f2)
 	chk=$(which dpkg-buildpackage |wc -l)
-	type=$(dpkg-architecture |grep "DEB_BUILD_ARCH=" |cut -d"=" -f2)
 
 	if  [ $chk -eq 0 ]; then
 		sudo apt-get install debhelper
 	fi
 
+	type=$(dpkg-architecture |grep "DEB_BUILD_ARCH=" |cut -d"=" -f2)
+
 	dpkg-buildpackage -rfakeroot
 	sudo dpkg -i ../${name}_${ver}_${type}.deb
+
+	if [ $? -ne 0 ]; then
+		sudo apt-get install -f
+	fi
 
 }
 
