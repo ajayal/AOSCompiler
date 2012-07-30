@@ -1,5 +1,7 @@
 bin/cmcompiler usr/bin/
-share/scripts/* usr/share/cmcompiler/scripts/
+share/cmcompiler_main.py usr/share/cmcompiler/
+share/cmcPy/* usr/share/cmcompiler/cmcPy/
+share/cmcBash/* usr/share/cmcompiler/cmcBash/
 share/images/* usr/share/cmcompiler/images/
 share/desktop/* usr/share/applications/
 share/manpage/* usr/share/man/man7/
