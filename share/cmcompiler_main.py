@@ -17,7 +17,7 @@ import pygtk
 pygtk.require('2.0')
 import gtk
 import os
-import urllib, urllib2
+import urllib2
 import re
 import platform
 import sys
@@ -163,47 +163,6 @@ def sync_button_clicked(obj):
 
 def compile_button_clicked(obj):
         vteterminal("Compiling")
-        
-def device_list():
-	LIST = []
-	b = Parser().read("branch")
-	if "Default" in b:
-		print "Meh you too"
-		chk_config = 0
-	elif "gingerbread" in b:
-		useBranch = Globals.myCM_GB_URL
-		chk_config = 1
-	elif "ics" in b:
-		useBranch = Globals.myCM_ICS_URL
-		chk_config = 1
-	elif "jellybean" in b:
-		useBranch = Globals.myCM_JB_URL
-		chk_config = 1
-	else:
-		useBranch = "null"
-		chk_config = 0
-
-	if chk_config == 1:
-		try:
-			filehandle = urllib.urlopen(useBranch)
-		except IOError:
-			print "fuck you"
-
-		for lines in filehandle.readlines():
-
-			if "combo" in lines and not "#" in lines:
-
-				x = lines.split(" ")
-				x = x[1]
-				x = x.split("_")
-				x = x[1]
-				x = x.split("-")
-				x = x[0]
-				
-				LIST.extend([x])
-
-		filehandle.close()
-		return LIST
     		
 ######################################################################
 # Some GTK globals
@@ -217,10 +176,6 @@ for i in ["Start adb", "View config", "Repo path", "Remove config", "Run bash", 
 branchCombo = gtk.combo_box_new_text()
 for i in ["gb", "ics", "jellybean"]:
 	branchCombo.append_text("%s" % i)
-	
-deviceCombo = gtk.combo_box_new_text()
-for i in device_list():
-	deviceCombo.append_text("%s" % i)
 
 makeCombo = gtk.combo_box_new_text()
 for i in range(1,numprocs+1):
@@ -264,10 +219,10 @@ def tools_combo_change(event):
         	remove_config()
         elif value == 4:
         	run_local_shell()
-	elif value == 5:
-		main_cmc_cmd()
+        elif value == 5:
+            main_cmc_cmd()
         else:
-        	pass
+            pass
 
         i = toolsCombo.set_active(-1)
 
@@ -283,9 +238,10 @@ def branch_combo_change(event):
         value = str(branchCombo.get_active_text())
         Parser().write("branch", value)
         Update().MAIN_INFO()
+        Update().DEVICES()
         
 def device_combo_change(event):
-        value = str(deviceCombo.get_active_text())
+        value = str(Globals.DEV_COMBO.get_active_text())
         Parser().write("device", value)
         Update().MAIN_INFO()
 
@@ -348,19 +304,22 @@ class advanced():
 		
 	def on_key_press(self, widget, data=None):
 		i = gtk.gdk.keyval_name(data.keyval)
-		
-		if i == "v":
+		print i
+
+		if i == "v" and data.state & gtk.gdk.CONTROL_MASK:
 			view_config()
-		elif i == "a":
+		elif i == "a" and data.state & gtk.gdk.CONTROL_MASK:
 			start_adb()
-		elif i == "m":
+		elif i == "m" and data.state & gtk.gdk.CONTROL_MASK:
 			main_cmc_cmd()
-		elif i == "s":
+		elif i == "s" and data.state & gtk.gdk.CONTROL_MASK:
 			compile_or_sync("Syncing")
-		elif i == "c":
+		elif i == "b" and data.state & gtk.gdk.CONTROL_MASK:
 			compile_or_sync("Compiling")
-		elif i == "r":
+		elif i == "r" and data.state & gtk.gdk.CONTROL_MASK:
 			choose_repo_path()
+		elif i == "x" and data.state & gtk.gdk.CONTROL_MASK or i == "Escape":
+			gtk.main_quit()
 		else:
 			pass
  
@@ -373,6 +332,7 @@ class advanced():
 		Globals.MAIN_WIN.connect("delete_event", self.main_quit)
 		Globals.MAIN_WIN.connect("key_press_event", self.on_key_press)
 		Globals.MAIN_WIN.set_events(gtk.gdk.KEY_PRESS_MASK)
+		Globals.MAIN_WIN.set_events(gtk.gdk.CONTROL_MASK)
 
 		pixbuf = gtk.gdk.pixbuf_new_from_file(Globals.myWallMain)
 		pixmap, mask = pixbuf.render_pixmap_and_mask()
@@ -420,11 +380,12 @@ class advanced():
 		branchLab.set_markup("<span color=\"%s\">Branch</span>" % Globals.myColor)
 		branchLab.show()
 		
-		deviceCombo.show()
+		Globals.DEV_COMBO.show()
 		#i = read_parser("device")
-		#deviceCombo.set_active(i)
-		deviceCombo.set_wrap_width(4)
-		deviceCombo.connect("changed", device_combo_change)
+		#Globals.DEV_COMBO.set_active(i)
+		Globals.DEV_COMBO.set_wrap_width(4)
+		Globals.DEV_COMBO.connect("changed", device_combo_change)
+		Update().DEVICES()
 		
 		deviceLab = gtk.Label()
 		deviceLab.set_markup("<span color=\"%s\">Device</span>" % Globals.myColor)
@@ -509,7 +470,7 @@ class advanced():
 		tableB.attach(branchLab, 1, 2, 0, 1, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
 		tableB.attach(branchCombo, 1, 2, 1, 2, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
 		tableB.attach(deviceLab, 2, 3, 0, 1, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
-		tableB.attach(deviceCombo, 2, 3, 1, 2, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
+		tableB.attach(Globals.DEV_COMBO, 2, 3, 1, 2, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
 		tableB.attach(syncjobsLab, 3, 4, 0, 1, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
 		tableB.attach(syncCombo, 3, 4, 1, 2, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
 		tableB.attach(makeLab, 4, 5, 0, 1, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)

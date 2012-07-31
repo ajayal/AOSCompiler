@@ -78,5 +78,6 @@ class Globals():
 	Any bugs? Please report them <a href=\"mailto:https://github.com/lithid/Cmcompiler/issues\">here</a>.\n"
 	
 	MAIN_WIN = gtk.Window(gtk.WINDOW_TOPLEVEL)
+	DEV_COMBO = gtk.combo_box_new_text()
 	MAIN_INFO = gtk.Label()
 
