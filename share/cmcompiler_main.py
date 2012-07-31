@@ -174,7 +174,7 @@ for i in ["Start adb", "View config", "Repo path", "Remove config", "Run bash", 
 	toolsCombo.append_text("%s" % i)
 
 branchCombo = gtk.combo_box_new_text()
-for i in ["gb", "ics", "jellybean"]:
+for i in ["gingerbread", "ics", "jellybean"]:
 	branchCombo.append_text("%s" % i)
 
 makeCombo = gtk.combo_box_new_text()
@@ -200,7 +200,7 @@ def run_local_shell():
 
 def get_branch_combo():
 	r = Parser().read("branch")
-	if r == "gb":
+	if r == "gingerbread":
 		return 0
 	elif r == "ics":
 		return 1

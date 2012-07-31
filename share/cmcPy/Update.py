@@ -51,6 +51,8 @@ class Update():
 			chk_config = 0
 
 		if chk_config == 1:
+
+			print useBranch
 			try:
 				filehandle = urllib.urlopen(useBranch)
 			except IOError:
@@ -59,6 +61,8 @@ class Update():
 			for lines in filehandle.readlines():
 
 				if "combo" in lines and not "#" in lines:
+
+					print lines
 
 					x = lines.split(" ")
 					x = x[1]
@@ -70,6 +74,7 @@ class Update():
 					LIST.extend([x])
 
 			filehandle.close()
+			print "Here"
 			for i in LIST:
 				Globals.DEV_COMBO.append_text("%s" % i)
 
