@@ -17,14 +17,10 @@ import pygtk
 pygtk.require('2.0')
 import gtk
 import os
-import urllib2
-import re
 import platform
 import sys
-import commands
 import vte
 import webbrowser
-import time
 from glob import glob
 
 from cmcPy.About import About
