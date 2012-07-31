@@ -76,8 +76,11 @@ class Globals():
 	Please intend to learn the system, contribute back to any upstream.\n\n\
 	Happy compiling,\n\nCode: Jeremie Long\nGraphics: SavocaFTW\n\n\
 	Any bugs? Please report them <a href=\"mailto:https://github.com/lithid/Cmcompiler/issues\">here</a>.\n"
+
+	key_bindings = "<small><small><span color=\"%s\">[CTL-L + (<b>v</b> = View config, <b>a</b> = Start adb, <b>m</b> = Main start/stop, <b>s</b> = Sync, <b>b</b> = build/compile, <b>r</b> = Repo path, <b>x</b> = Quit)]</span></small></small>" % myColor
 	
 	MAIN_WIN = gtk.Window(gtk.WINDOW_TOPLEVEL)
 	DEV_COMBO = gtk.combo_box_new_text()
+	KEY_BIND_INFO = gtk.Label()
 	MAIN_INFO = gtk.Label()
 

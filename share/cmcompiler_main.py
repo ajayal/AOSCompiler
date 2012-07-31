@@ -300,7 +300,6 @@ class advanced():
 		
 	def on_key_press(self, widget, data=None):
 		i = gtk.gdk.keyval_name(data.keyval)
-		print i
 
 		if i == "v" and data.state & gtk.gdk.CONTROL_MASK:
 			view_config()
@@ -365,6 +364,10 @@ class advanced():
 		tableEntry.show()
 
 		MAIN_VBOX.pack_start(tableEntry, True, True, 5)
+
+		Globals.KEY_BIND_INFO.set_markup(Globals.key_bindings)
+		Globals.KEY_BIND_INFO.show()
+		MAIN_VBOX.pack_start(Globals.KEY_BIND_INFO, False, False, 5)
 
 		branchCombo.show()
 		i = get_branch_combo()
