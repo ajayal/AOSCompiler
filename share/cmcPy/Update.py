@@ -18,8 +18,16 @@ import urllib
 class Update():
 
 	def BACKGROUND_COLOR(self):
-		color = gtk.gdk.color_parse(Parser().read('background_color'))
-		Globals.MAIN_WIN.modify_bg(gtk.STATE_NORMAL, color)
+		colord = gtk.ColorSelectionDialog("Choose background image")
+		selector = colord.get_color_selection()
+		response = colord.run()
+
+		if response == gtk.RESPONSE_OK:
+			r = str(selector.get_current_color())
+			Parser().write("background_color", r)
+			color = gtk.gdk.color_parse(r)
+			Globals.MAIN_WIN.modify_bg(gtk.STATE_NORMAL, color)
+		colord.destroy()
 
 	def TEXT_COLOR(self):
 		pass
@@ -43,7 +51,6 @@ class Update():
 
 		b = Parser().read("branch")
 		if "Default" in b:
-			print "Meh you too"
 			chk_config = 0
 		elif "gingerbread" in b:
 			useBranch = Globals.myCM_GB_URL
@@ -78,7 +85,6 @@ class Update():
 					LIST.extend([x])
 
 			filehandle.close()
-			print "Here"
 			for i in LIST:
 				Globals.DEV_COMBO.append_text("%s" % i)
 

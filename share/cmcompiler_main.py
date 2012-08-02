@@ -293,14 +293,6 @@ class advanced():
 		elif i == "r" and data.state & gtk.gdk.CONTROL_MASK:
 			choose_repo_path()
 		elif i == "d" and data.state & gtk.gdk.CONTROL_MASK:
-			colord = gtk.ColorSelectionDialog("Choose background image")
-			selector = colord.get_color_selection()
-			response = colord.run()
-
-			if response == gtk.RESPONSE_OK:
-				r = selector.get_current_color()
-				Parser().write("background_color", r)
-			colord.destroy()
 			Update().BACKGROUND_COLOR()
 		elif i == "x" and data.state & gtk.gdk.CONTROL_MASK or i == "Escape":
 			gtk.main_quit()
@@ -317,8 +309,8 @@ class advanced():
 		Globals.MAIN_WIN.connect("key_press_event", self.on_key_press)
 		Globals.MAIN_WIN.set_events(gtk.gdk.KEY_PRESS_MASK)
 		Globals.MAIN_WIN.set_events(gtk.gdk.CONTROL_MASK)
-
-		Update().BACKGROUND_COLOR()
+		color = gtk.gdk.color_parse(Parser().read('background_color'))
+		Globals.MAIN_WIN.modify_bg(gtk.STATE_NORMAL, color)
 		Globals.MAIN_WIN.resize(1080, 600)
 		Globals.MAIN_WIN.realize()
 

@@ -21,7 +21,7 @@ class Globals():
 	myWallMain = "%s/CM_WALL_MAIN.jpg" % myIMGS
 	myTHEME = "%s/theme/" % myIMGS
 	myBASH = "/usr/share/cmcompiler/cmcBash"
-	myColor = "Black"
+	myColor = "white"
 
 	# VTE Commands
 	mySYNC_SCRIPT = "%s/sync_script.sh" % myBASH
