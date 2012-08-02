@@ -31,7 +31,6 @@ from cmcPy.Update import Update
 ######################################################################
 # Helper functions
 ######################################################################
-numprocs = [ int(line.strip()[-1]) for line in open('/proc/cpuinfo', 'r') if line.startswith('processor') ][-1] + 1
 
 def openBuildFolder():
      t = "%s/out/target/product/%s" % (repo_path, build_device)
@@ -75,32 +74,6 @@ def which(program):
 
 	return None
 
-def custom_dialog(dialog_type, title, message):
-    dialog = gtk.MessageDialog(None,
-                               gtk.DIALOG_MODAL,
-                               type=dialog_type,
-                               buttons=gtk.BUTTONS_OK)
-    dialog.set_markup("<b>%s</b>" % title)
-    dialog.format_secondary_markup(message)
-    dialog.run()
-    dialog.destroy()
-    return True
-
-def question_dialog(title, message):
-    dialog = gtk.MessageDialog(None,
-                               gtk.DIALOG_MODAL,
-                               type=gtk.MESSAGE_QUESTION,
-                               buttons=gtk.BUTTONS_YES_NO)
-    dialog.set_markup("<b>%s</b>" % title)
-    dialog.format_secondary_markup(message)
-    response = dialog.run()
-    dialog.destroy()
-
-    if response == gtk.RESPONSE_YES:
-       return True
-    else:
-       return False
-
 def chk_config():
 	if not os.path.exists(Globals.myCONF_DIR):
 		os.makedirs(Globals.myCONF_DIR)
@@ -129,18 +102,11 @@ def get_askConfirm():
 		if not os.path.exists(Globals.askConfirm):
 			file(Globals.askConfirm, 'w').close()
 
-	dialog = gtk.MessageDialog(None, gtk.DIALOG_MODAL, type=gtk.MESSAGE_INFO, buttons=gtk.BUTTONS_OK)
-	dialog.set_title("**** User Confirmation ****")
-	dialog.set_markup("<small>This is what <b>YOU</b> do to <b>YOUR</b> phone.</small>")
-	dialog.format_secondary_markup(ask_confirm_info)
-	dialog.set_resizable(False)
-
-	r = dialog.run()
-	if r == gtk.RESPONSE_OK:
+	q = Globals().QDial("**** User Confirmation ****", Globals.ask_confirm_info)
+	if q == True:
 		askedClicked()
 	else:
 		exit()
-	dialog.destroy()
                 
 def download_clicked(obj):
         webbrowser.open_new_tab(Globals.myGETCM)
@@ -166,7 +132,7 @@ def compile_button_clicked(obj):
 myMAIN_ICON = gtk.gdk.pixbuf_new_from_file(Globals.myICON)
 
 toolsCombo = gtk.combo_box_new_text()
-for i in ["Start adb", "View config", "Repo path", "Remove config", "Run bash", "Stop/reset"]:
+for i in ["Start adb", "View config", "Repo path", "Remove config", "Run bash", "Add device", "Stop/reset"]:
 	toolsCombo.append_text("%s" % i)
 
 branchCombo = gtk.combo_box_new_text()
@@ -174,7 +140,7 @@ for i in ["gingerbread", "ics", "jellybean"]:
 	branchCombo.append_text("%s" % i)
 
 makeCombo = gtk.combo_box_new_text()
-for i in range(1,numprocs+1):
+for i in range(1,Globals.numprocs+1):
 	makeCombo.append_text("%s" % i)
 
 syncCombo = gtk.combo_box_new_text()
@@ -193,6 +159,17 @@ def run_vt_command(event):
 	
 def run_local_shell():
 	TERM.fork_command('bash')
+
+def run_custom_device():
+    q = Globals().QDial("Are you sure?", "Are you sure you want to remove your current config?\n\nOnce this is done it can't be undone.")
+    if q == True:
+        p = Parser().read("repo_path")
+        TERM.fork_command('bash')
+        TERM.feed_child('cd %s\n' % p)
+        TERM.feed_child('clear\n')
+        TERM.feed_child('ls -a\n')
+    else:
+        Globals().CDial(gtk.MESSAGE_INFO, "Skipping this", "No changes have been made!")
 
 def get_branch_combo():
 	r = Parser().read("branch")
@@ -216,6 +193,8 @@ def tools_combo_change(event):
         elif value == 4:
         	run_local_shell()
         elif value == 5:
+            run_custom_device()
+        elif value == 5:
             main_cmc_cmd()
         else:
             pass
@@ -233,13 +212,13 @@ def sync_combo_change(event):
 def branch_combo_change(event):
         value = str(branchCombo.get_active_text())
         Parser().write("branch", value)
-        Update().MAIN_INFO()
+        Update().MAIN_INFO_LABEL()
         Update().DEVICES()
         
 def device_combo_change(event):
         value = str(Globals.DEV_COMBO.get_active_text())
         Parser().write("device", value)
-        Update().MAIN_INFO()
+        Update().MAIN_INFO_LABEL()
 
 def choose_repo_path():
 	direct = gtk.FileChooserDialog("Repo path...", action=gtk.FILE_CHOOSER_ACTION_SELECT_FOLDER, buttons=(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL, gtk.STOCK_OK, gtk.RESPONSE_ACCEPT))
@@ -249,15 +228,15 @@ def choose_repo_path():
 	if r == gtk.RESPONSE_ACCEPT:
 		try:
 			Parser().write("repo_path", repo_dir)
-			Update().MAIN_INFO()
+			Update().MAIN_INFO_LABEL()
 		except NameError:
 			pass
 
 def remove_config():
-	q = question_dialog("Remove config?", "Are you sure you want to remove your current config?\n\nOnce this is done it can't be undone.")
+	q = Globals.QDial("Remove config?", "Are you sure you want to remove your current config?\n\nOnce this is done it can't be undone.")
 	if q == True:
 		os.remove(cmcconfig)
-		custom_dialog(gtk.MESSAGE_INFO, "Configuration removed", "Your configuration has been removed. Please restart the application to re-configure.")
+		CDial(gtk.MESSAGE_INFO, "Configuration removed", "Your configuration has been removed. Please restart the application to re-configure.")
 
 def start_adb():
 	TERM.fork_command(Globals.myA_ADB_START)
@@ -273,7 +252,7 @@ def compile_or_sync(arg):
 		TERM.fork_command(Globals.mySYNC_SCRIPT)
 	elif arg == "Compiling":
 		p = Parser().read("repo_path")
-		d = PParser().read("device")
+		d = Parser().read("device")
 		b = Parser().read("branch")
 		if p == "Default":
 			p = Globals.myDEF_REPO_PATH
@@ -313,6 +292,16 @@ class advanced():
 			compile_or_sync("Compiling")
 		elif i == "r" and data.state & gtk.gdk.CONTROL_MASK:
 			choose_repo_path()
+		elif i == "d" and data.state & gtk.gdk.CONTROL_MASK:
+			colord = gtk.ColorSelectionDialog("Choose background image")
+			selector = colord.get_color_selection()
+			response = colord.run()
+
+			if response == gtk.RESPONSE_OK:
+				r = selector.get_current_color()
+				Parser().write("background_color", r)
+			colord.destroy()
+			Update().BACKGROUND_COLOR()
 		elif i == "x" and data.state & gtk.gdk.CONTROL_MASK or i == "Escape":
 			gtk.main_quit()
 		else:
@@ -329,15 +318,9 @@ class advanced():
 		Globals.MAIN_WIN.set_events(gtk.gdk.KEY_PRESS_MASK)
 		Globals.MAIN_WIN.set_events(gtk.gdk.CONTROL_MASK)
 
-		pixbuf = gtk.gdk.pixbuf_new_from_file(Globals.myWallMain)
-		pixmap, mask = pixbuf.render_pixmap_and_mask()
-		width, height = pixmap.get_size()
-		del pixbuf
-		Globals.MAIN_WIN.set_app_paintable(gtk.TRUE)
-		Globals.MAIN_WIN.resize(width, height)
+		Update().BACKGROUND_COLOR()
+		Globals.MAIN_WIN.resize(1080, 600)
 		Globals.MAIN_WIN.realize()
-		Globals.MAIN_WIN.window.set_back_pixmap(pixmap, gtk.FALSE)
-		del pixmap
 
 		MAIN_VBOX = gtk.VBox(False, 0)
 		
@@ -349,7 +332,7 @@ class advanced():
 		table = gtk.Table(1, 3, False)
 		table.show()
 		
-		Update().MAIN_INFO()
+		Update().MAIN_INFO_LABEL()
 		Globals.MAIN_INFO.show()
 		MAIN_VBOX.pack_start(Globals.MAIN_INFO, False, False, 5)
 

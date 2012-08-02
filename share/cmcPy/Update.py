@@ -10,13 +10,21 @@
 #
 ######################################################################
 
-from cmcPy.Globals import Globals
-from cmcPy.Parser import Parser
+import gtk
+from Globals import Globals
+from Parser import Parser
 import urllib
 
 class Update():
 
-	def MAIN_INFO(self):
+	def BACKGROUND_COLOR(self):
+		color = gtk.gdk.color_parse(Parser().read('background_color'))
+		Globals.MAIN_WIN.modify_bg(gtk.STATE_NORMAL, color)
+
+	def TEXT_COLOR(self):
+		pass
+
+	def MAIN_INFO_LABEL(self):
 		b = Parser().read("branch")
 		d = Parser().read("device")
 		r = Parser().read("repo_path")
