@@ -76,8 +76,6 @@ to learn the android system, but to release the need consistly remember menial t
 Please intend to learn the system, contribute back to any upstream.\n\n\
 Happy compiling,\n\nCode: Jeremie Long\nGraphics: SavocaFTW\n\n\
 Any bugs? Please report them <a href=\"mailto:https://github.com/lithid/Cmcompiler/issues\">here</a>.\n"
-
-	key_bindings = "<small><small><span color=\"%s\">[CTL-L + (<b>v</b> = View config, <b>a</b> = Start adb, <b>m</b> = Main start/stop, <b>s</b> = Sync, <b>b</b> = build/compile, <b>d</b> = Background color, <b>r</b> = Repo path, <b>esc</b> = Quit)]</span></small></small>" % myColor
 	
 	numprocs = [ int(line.strip()[-1]) for line in open('/proc/cpuinfo', 'r') if line.startswith('processor') ][-1] + 1
 
@@ -85,6 +83,15 @@ Any bugs? Please report them <a href=\"mailto:https://github.com/lithid/Cmcompil
 	DEV_COMBO = gtk.combo_box_new_text()
 	KEY_BIND_INFO = gtk.Label()
 	MAIN_INFO = gtk.Label()
+
+	branchLab = gtk.Label()
+	deviceLab = gtk.Label()
+	syncjobsLab = gtk.Label()
+	makeLab = gtk.Label()
+	compileLab = gtk.Label()
+	syncLab = gtk.Label()
+	toolsLab = gtk.Label()
+	build_appLab = gtk.Label()
 
 	def CDial(self, dialog_type, title, message):
 		dialog = gtk.MessageDialog(None, gtk.DIALOG_MODAL, type=dialog_type, buttons=gtk.BUTTONS_OK)
