@@ -201,9 +201,10 @@ def run_custom_device():
         b = entry3.get_text()
         r = Parser().read("repo_path")
         os.chdir(r)
-        if not os.path.exists("%s/%s" % (r,m)):
-            os.mkdir("%s/%s" % (r,m))
-        os.chdir("%s/%s" % (r,m))
+        manu_path = "%s/device/%s" % (r,m)
+        if not os.path.exists(manu_path):
+            os.mkdir(manu_path)
+        os.chdir(manu_path)
         TERM.fork_command('bash')
         TERM.feed_child('git clone %s -b %s %s\n' % (u,b,n))
     else:
