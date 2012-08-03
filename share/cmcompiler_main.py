@@ -239,7 +239,7 @@ def tools_combo_change(event):
 	elif value == 7:
 		Update().BACKGROUND_COLOR()
 	elif value == 8:
-		Update().TEXT_COLOR("dialog")
+		Update().TEXT_COLOR_DIALOG()
 	else:
 		pass
 
@@ -256,13 +256,13 @@ def sync_combo_change(event):
 def branch_combo_change(event):
 	value = str(branchCombo.get_active_text())
 	Parser().write("branch", value)
-	Update().MAIN_INFO_LABEL()
+	Update().TEXT_COLOR()
 	Update().DEVICES()
         
 def device_combo_change(event):
 	value = str(Globals.DEV_COMBO.get_active_text())
 	Parser().write("device", value)
-	Update().MAIN_INFO_LABEL()
+	Update().TEXT_COLOR()
 
 def choose_repo_path():
 	direct = gtk.FileChooserDialog("Repo path...", action=gtk.FILE_CHOOSER_ACTION_SELECT_FOLDER, buttons=(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL, gtk.STOCK_OK, gtk.RESPONSE_ACCEPT))
@@ -272,7 +272,7 @@ def choose_repo_path():
 	if r == gtk.RESPONSE_ACCEPT:
 		try:
 			Parser().write("repo_path", repo_dir)
-			Update().MAIN_INFO_LABEL()
+			Update().TEXT_COLOR()
 		except NameError:
 			pass
 
@@ -302,7 +302,7 @@ def compile_or_sync(arg):
 			p = Globals.myDEF_REPO_PATH
 		os.chdir(p)
 		m = getManu(d, b)
-		if m == None:
+		if m == "None":
 			TERM.fork_command(Globals.myROOMSERVICE_SCRIPT)
 		m = getManu(d, b)
 		Parser().write("manuf", m)
@@ -364,8 +364,7 @@ class advanced():
 
 		table = gtk.Table(1, 3, False)
 		table.show()
-		
-		Update().MAIN_INFO_LABEL()
+
 		Globals.MAIN_INFO.show()
 		MAIN_VBOX.pack_start(Globals.MAIN_INFO, False, False, 5)
 
@@ -488,7 +487,7 @@ class advanced():
 		tableEntry.attach(SpacerELB, 2, 3, 1, 2, xpadding=25, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
 		
 		main_cmc_cmd()
-		Update().TEXT_COLOR("update")
+		Update().TEXT_COLOR()
 
 		Globals.MAIN_WIN.add(MAIN_VBOX)
 		Globals.MAIN_WIN.show_all()

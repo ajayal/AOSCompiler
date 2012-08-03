@@ -107,7 +107,7 @@ class Parser():
 		if arg == "text_color":
 			config.set(title, 'text_color', value)
 		elif getManuf:
-			config.set(title, 'text_color', getBackColor)
+			config.set(title, 'text_color', getTextColor)
 		else:
 			config.set(title, 'text_color', 'Black')
 
