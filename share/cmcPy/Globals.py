@@ -95,8 +95,6 @@ Any bugs? Please report them <a href=\"mailto:https://github.com/lithid/Cmcompil
 	build_appLab = gtk.Label()
 	TERM = vte.Terminal()
 	TERM.set_font_from_string("Ubuntu Mono 9")
-	TERM.set_color_foreground(gtk.gdk.Color("#000000"))
-	TERM.set_color_background(gtk.gdk.Color("#000000"))
 
 	def CDial(self, dialog_type, title, message):
 		dialog = gtk.MessageDialog(None, gtk.DIALOG_MODAL, type=dialog_type, buttons=gtk.BUTTONS_OK)

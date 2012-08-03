@@ -326,8 +326,8 @@ class advanced():
 		Globals.MAIN_WIN.set_events(gtk.gdk.CONTROL_MASK)
 		color = gtk.gdk.color_parse(Parser().read('background_color'))
 		Globals.MAIN_WIN.modify_bg(gtk.STATE_NORMAL, color)
-		Globals.MAIN_WIN.resize(1080, 600)
-		Globals.MAIN_WIN.realize()
+		Globals.MAIN_WIN.set_size_request(1080, 600)
+		Globals.MAIN_WIN.set_resizable(False)
 
 		MAIN_VBOX = gtk.VBox(False, 0)
 		
