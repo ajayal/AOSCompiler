@@ -19,14 +19,14 @@ import gtk
 import os
 import platform
 import sys
-import vte
+import time
 import webbrowser
-from glob import glob
 
 from cmcPy.About import About
 from cmcPy.Globals import Globals
 from cmcPy.Parser import Parser
 from cmcPy.Update import Update
+from cmcPy.Utils import Utils
 
 ######################################################################
 # Helper functions
@@ -78,25 +78,6 @@ def chk_config():
 	if not os.path.exists(Globals.myCONF_DIR):
 		os.makedirs(Globals.myCONF_DIR)
 
-def getManu(arg, br):
-	s = None
-	if br == "gb":
-		paths = glob("device/*/*/device.mk")
-	elif br == "ics" or br == "jellybean":
-		paths = glob("device/*/*/cm.mk")
-	else:
-		paths = None
-
-	if paths is not None:
-		for x in paths:
-			if arg in x:
-				s = x.split("/")
-				s = s[1]
-	if s:
-		return s
-	else:
-		return None
-
 def get_askConfirm():
 	def askedClicked():
 		if not os.path.exists(Globals.askConfirm):
@@ -147,7 +128,6 @@ syncCombo = gtk.combo_box_new_text()
 for i in range(1,17):
 	syncCombo.append_text("%s" % i)
 
-TERM = vte.Terminal()
 entryBox = gtk.Entry()
 
 ######################################################################
@@ -158,7 +138,7 @@ def run_vt_command(event):
 	print i
 	
 def run_local_shell():
-	TERM.fork_command('bash')
+	Globals.TERM.fork_command('bash')
 
 def run_custom_device():
 	title = "Setup custom device"
@@ -205,8 +185,8 @@ def run_custom_device():
 		if not os.path.exists(manu_path):
 			os.mkdir(manu_path)
 		os.chdir(manu_path)
-		TERM.fork_command('bash')
-		TERM.feed_child('git clone %s -b %s %s\n' % (u,b,n))
+		Globals.TERM.fork_command('bash')
+		Globals.TERM.feed_child('git clone %s -b %s %s\n' % (u,b,n))
 	else:
 		Globals().CDial(gtk.MESSAGE_INFO, "Skipping this", "No changes have been made!")
 	dialog.destroy()
@@ -283,32 +263,26 @@ def remove_config():
 		CDial(gtk.MESSAGE_INFO, "Configuration removed", "Your configuration has been removed. Please restart the application to re-configure.")
 
 def start_adb():
-	TERM.fork_command(Globals.myA_ADB_START)
+	Globals.TERM.fork_command(Globals.myA_ADB_START)
 
 def view_config():
-	TERM.fork_command(Globals.myA_VIEW_CONFIG)
+	Globals.TERM.fork_command(Globals.myA_VIEW_CONFIG)
 	
 def main_cmc_cmd():
-	TERM.fork_command(Globals.myCMC_VT_TITLE)
+	Globals.TERM.fork_command(Globals.myCMC_VT_TITLE)
 	
 def compile_or_sync(arg):
 	if arg == "Syncing":
-		TERM.fork_command(Globals.mySYNC_SCRIPT)
+		Globals.TERM.fork_command(Globals.mySYNC_SCRIPT)
 	elif arg == "Compiling":
-		p = Parser().read("repo_path")
-		d = Parser().read("device")
-		b = Parser().read("branch")
-		if p == "Default":
-			p = Globals.myDEF_REPO_PATH
-		os.chdir(p)
-		m = getManu(d, b)
-		if m == "None":
-			TERM.fork_command(Globals.myROOMSERVICE_SCRIPT)
-		m = getManu(d, b)
-		Parser().write("manuf", m)
-		TERM.fork_command(Globals.myCOMPILE_SCRIPT)
-	else:
-		TERM.fork_command(Globals.myNONE_SCRIPT)
+		i = str(Utils().Compile())
+
+		i = i.split("-")
+		RUN = i[0]
+		PID = i[1]
+
+		if RUN == "ROOM":
+			Globals().CDial(gtk.MESSAGE_INFO, "<small>Running roomservice", "Roomservice is running right now, you will have to run, \"<b>Compile</b>\" again after this is done downloading your kernel and device dependancies.</small>")
 
 def main_sync_compile_btn(obj, arg):
 	compile_or_sync(arg)
@@ -359,8 +333,8 @@ class advanced():
 		
 		TERM_FRAME = gtk.Frame()
 		TERM_FRAME.show()
-		TERM.show()
-		TERM_FRAME.add(TERM)
+		Globals.TERM.show()
+		TERM_FRAME.add(Globals.TERM)
 
 		table = gtk.Table(1, 3, False)
 		table.show()

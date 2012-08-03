@@ -12,6 +12,7 @@
 
 import os
 import gtk
+import vte
 
 class Globals():
 
@@ -92,6 +93,7 @@ Any bugs? Please report them <a href=\"mailto:https://github.com/lithid/Cmcompil
 	syncLab = gtk.Label()
 	toolsLab = gtk.Label()
 	build_appLab = gtk.Label()
+	TERM = vte.Terminal()
 
 	def CDial(self, dialog_type, title, message):
 		dialog = gtk.MessageDialog(None, gtk.DIALOG_MODAL, type=dialog_type, buttons=gtk.BUTTONS_OK)
