@@ -135,7 +135,14 @@ entryBox = gtk.Entry()
 ######################################################################
 def run_vt_command(event):
 	i = entryBox.get_text()
-	print i
+	r = Parser().read('repo_path')
+	d = Parser().read('device')
+	os.chdir(r)
+	Globals.TERM.fork_command('bash')
+	Globals.TERM.feed_child('clear\n')
+	Globals.TERM.feed_child('. build/envsetup.sh\n')
+	Globals.TERM.feed_child('lunch cm_%s-userdebug\n' % d)
+	Globals.TERM.feed_child('make -j%s %s\n' % (Globals.numprocs, i))
 	
 def run_local_shell():
 	Globals.TERM.fork_command('bash')

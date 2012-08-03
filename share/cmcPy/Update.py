@@ -48,7 +48,7 @@ class Update():
 		Globals.compileLab.set_markup("<span color=\"%s\">Compile</span>" % myColor)
 		Globals.syncLab.set_markup("<span color=\"%s\">Sync</span>" % myColor)
 		Globals.toolsLab.set_markup("<span color=\"%s\">Tools</span>" % myColor)
-		Globals.build_appLab.set_markup("<span color=\"%s\"><small>Build specific <b>app/binary</b> here.</small></span>" % myColor)
+		Globals.build_appLab.set_markup("<span color=\"%s\"><small>Build specific <b>app/binary</b> here. <enter></small></span>" % myColor)
 		Globals.KEY_BIND_INFO.set_markup("<small><small><span color=\"%s\">[CTL-L + (<b>v</b> = View config, <b>a</b> = Start adb, <b>m</b> = Main start/stop, <b>s</b> = Sync, <b>b</b> = build/compile, <b>r</b> = Repo path) <b>esc</b> = Quit]</span></small></small>" % myColor)
 		Globals.MAIN_INFO.set_markup("<span color=\"%s\"><small>Device: <b>%s</b> <big>|</big> Branch: <b>%s</b> <big>|</big> Repo path: <b>%s</b></small></span>" % (myColor, d,b,r))
 
