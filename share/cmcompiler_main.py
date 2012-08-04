@@ -145,6 +145,7 @@ def run_vt_command(event):
 	Globals.TERM.feed_child('make -j%s %s\n' % (Globals.numprocs, i))
 	
 def run_local_shell():
+	Globals.TERM.set_background_saturation(0.1)
 	Globals.TERM.fork_command('bash')
 
 def run_custom_device():
@@ -277,13 +278,15 @@ def remove_config():
 		Utils().CDial(gtk.MESSAGE_INFO, "Configuration removed", "Your configuration has been removed. Please restart the application to re-configure.")
 
 def start_adb():
+	Globals.TERM.set_background_saturation(0.1)
 	Globals.TERM.fork_command(Globals.myA_ADB_START)
 
 def view_config():
 	Utils().ViewConfig()
 	
 def main_cmc_cmd():
-	Globals.TERM.fork_command(Globals.myCMC_VT_TITLE)
+	Globals.TERM.set_background_saturation(1.0)
+	Globals.TERM.fork_command('clear')
 	
 def compile_or_sync(arg):
 	if arg == "Syncing":
@@ -473,8 +476,7 @@ class advanced():
 		tableEntry.attach(entryBox, 1, 2, 1, 2, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
 		tableEntry.attach(SpacerELT, 2, 3, 0, 1, xpadding=25, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
 		tableEntry.attach(SpacerELB, 2, 3, 1, 2, xpadding=25, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
-		
-		main_cmc_cmd()
+
 		Update().TEXT_COLOR()
 
 		Globals.MAIN_WIN.add(MAIN_VBOX)

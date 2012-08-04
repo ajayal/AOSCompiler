@@ -19,7 +19,7 @@ class Globals():
 	# Resources
 	myIMGS = "/usr/share/cmcompiler/images"
 	myICON = "%s/cmc-icon.png" % myIMGS
-	myWallMain = "%s/CM_WALL_MAIN.jpg" % myIMGS
+	myTermWall = "%s/termwall.png" % myIMGS
 	myTHEME = "%s/theme/" % myIMGS
 	myBASH = "/usr/share/cmcompiler/cmcBash"
 	myColor = "white"
@@ -95,4 +95,6 @@ Any bugs? Please report them <a href=\"mailto:https://github.com/lithid/Cmcompil
 	build_appLab = gtk.Label()
 	TERM = vte.Terminal()
 	TERM.set_font_from_string("Ubuntu Mono 9")
+	TERM.set_background_image_file(myTermWall)
+	TERM.set_background_saturation(1.0)
 
