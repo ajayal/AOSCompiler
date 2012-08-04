@@ -19,7 +19,7 @@ class Globals():
 	# Resources
 	myIMGS = "/usr/share/cmcompiler/images"
 	myICON = "%s/cmc-icon.png" % myIMGS
-	myTermWall = "%s/termwall.png" % myIMGS
+	myTermWall = "%s/termwall.jpg" % myIMGS
 	myTHEME = "%s/theme/" % myIMGS
 	myBASH = "/usr/share/cmcompiler/cmcBash"
 	myColor = "white"
