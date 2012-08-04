@@ -251,12 +251,11 @@ def sync_combo_change(event):
 def branch_combo_change(event):
 	value = str(branchCombo.get_active_text())
 	Parser().write("branch", value)
+	Parser().write("device", "None")
 	Update().TEXT_COLOR()
-	Update().DEVICES()
         
-def device_combo_change(event):
-	value = str(Globals.DEV_COMBO.get_active_text())
-	Parser().write("device", value)
+def device_button(event):
+	Update().DEVICES()
 	Update().TEXT_COLOR()
 
 def choose_repo_path():
@@ -382,10 +381,9 @@ class advanced():
 
 		Globals.branchLab.show()
 		
-		Globals.DEV_COMBO.show()
-		Globals.DEV_COMBO.set_wrap_width(4)
-		Globals.DEV_COMBO.connect("changed", device_combo_change)
-		Update().DEVICES()
+		Globals.DEV_BTN.set_size_request(140, 28)
+		Globals.DEV_BTN.connect("clicked", device_button)
+		Globals.DEV_BTN.show()
 
 		Globals.deviceLab.show()
 		
@@ -456,7 +454,7 @@ class advanced():
 		tableB.attach(Globals.branchLab, 1, 2, 0, 1, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
 		tableB.attach(branchCombo, 1, 2, 1, 2, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
 		tableB.attach(Globals.deviceLab, 2, 3, 0, 1, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
-		tableB.attach(Globals.DEV_COMBO, 2, 3, 1, 2, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
+		tableB.attach(Globals.DEV_BTN, 2, 3, 1, 2, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
 		tableB.attach(Globals.syncjobsLab, 3, 4, 0, 1, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
 		tableB.attach(syncCombo, 3, 4, 1, 2, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
 		tableB.attach(Globals.makeLab, 4, 5, 0, 1, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)

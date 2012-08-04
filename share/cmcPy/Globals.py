@@ -81,7 +81,7 @@ Any bugs? Please report them <a href=\"mailto:https://github.com/lithid/Cmcompil
 	numprocs = [ int(line.strip()[-1]) for line in open('/proc/cpuinfo', 'r') if line.startswith('processor') ][-1] + 1
 
 	MAIN_WIN = gtk.Window(gtk.WINDOW_TOPLEVEL)
-	DEV_COMBO = gtk.combo_box_new_text()
+	DEV_BTN = gtk.Button("Meh")
 	KEY_BIND_INFO = gtk.Label()
 	MAIN_INFO = gtk.Label()
 

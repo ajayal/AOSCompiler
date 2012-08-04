@@ -34,11 +34,7 @@ class Utils():
 		sw.show()
 		table = gtk.Table(1, 1, False)
 		table.show()
-		view = gtk.Viewport()
-		view.modify_bg(gtk.STATE_NORMAL, color)
-		view.add(table)
-		view.show()
-		sw.add(view)
+		sw.add_with_viewport(table)
 		frame = gtk.Frame()
 		frame.add(sw)
 		frame_label = gtk.Label()
@@ -63,7 +59,7 @@ class Utils():
 					x = i[0]
 					y = i[1]
 					label = gtk.Label()
-					label.set_markup("<span color=\"%s\"><b>%s:</b> <small>%s</small></span>" % (myColor, x, y))
+					label.set_markup("<b>%s:</b> <small>%s</small>" % (x, y))
 					label.show()
 					table.attach(label, 0, 1, count-1, count, xpadding=10, ypadding=10)
 		except IOError:
