@@ -83,7 +83,7 @@ def get_askConfirm():
 		if not os.path.exists(Globals.askConfirm):
 			file(Globals.askConfirm, 'w').close()
 
-	q = Globals().QDial("**** User Confirmation ****", Globals.ask_confirm_info)
+	q = Utils().QDial("**** User Confirmation ****", Globals.ask_confirm_info)
 	if q == True:
 		askedClicked()
 	else:
@@ -148,26 +148,33 @@ def run_local_shell():
 	Globals.TERM.fork_command('bash')
 
 def run_custom_device():
+	myColor = Parser().read("text_color")
+	color = gtk.gdk.color_parse(Parser().read('background_color'))
 	title = "Setup custom device"
 	message = "Please setup your device here:"
 	dialog = gtk.MessageDialog(None, gtk.DIALOG_MODAL, type=gtk.MESSAGE_INFO, buttons=gtk.BUTTONS_OK)
-	dialog.set_markup("<b>%s</b>" % title)
-	dialog.format_secondary_markup(message)
+	dialog.set_markup("<span color=\"%s\"><b>%s</b></span>" % (myColor, title))
+	dialog.modify_bg(gtk.STATE_NORMAL, color)
+	dialog.format_secondary_markup("<span color=\"%s\">%s</span>" % (myColor, message))
 	table = gtk.Table(8, 1, False)
 	dialog.vbox.pack_start(table)
-	label = gtk.Label("Device name")
+	label = gtk.Label()
+	label.set_markup("<span color=\"%s\">Device name</span>" % myColor)
 	label.show()
 	entry = gtk.Entry()
 	entry.show()
-	label1 = gtk.Label("Device manufacturer")
+	label1 = gtk.Label()
+	label1.set_markup("<span color=\"%s\">Device manufacturer</span>" % myColor)
 	label1.show()
 	entry1 = gtk.Entry()
 	entry1.show()
-	label2 = gtk.Label("Device tree url")
+	label2 = gtk.Label()
+	label2.set_markup("<span color=\"%s\">Device tree url</span>" % myColor)
 	label2.show()
 	entry2 = gtk.Entry()
 	entry2.show()
-	label3 = gtk.Label("Device tree branch")
+	label3 = gtk.Label()
+	label3.set_markup("<span color=\"%s\">Device tree branch</span>" % myColor)
 	label3.show()
 	entry3 = gtk.Entry()
 	entry3.show()
@@ -195,7 +202,7 @@ def run_custom_device():
 		Globals.TERM.fork_command('bash')
 		Globals.TERM.feed_child('git clone %s -b %s %s\n' % (u,b,n))
 	else:
-		Globals().CDial(gtk.MESSAGE_INFO, "Skipping this", "No changes have been made!")
+		Utils().CDial(gtk.MESSAGE_INFO, "Skipping this", "No changes have been made!")
 	dialog.destroy()
 
 def get_branch_combo():
@@ -264,16 +271,16 @@ def choose_repo_path():
 			pass
 
 def remove_config():
-	q = Globals.QDial("Remove config?", "Are you sure you want to remove your current config?\n\nOnce this is done it can't be undone.")
+	q = Utils().QDial("Remove config?", "Are you sure you want to remove your current config?\n\nOnce this is done it can't be undone.")
 	if q == True:
 		os.remove(cmcconfig)
-		CDial(gtk.MESSAGE_INFO, "Configuration removed", "Your configuration has been removed. Please restart the application to re-configure.")
+		Utils().CDial(gtk.MESSAGE_INFO, "Configuration removed", "Your configuration has been removed. Please restart the application to re-configure.")
 
 def start_adb():
 	Globals.TERM.fork_command(Globals.myA_ADB_START)
 
 def view_config():
-	Globals.TERM.fork_command(Globals.myA_VIEW_CONFIG)
+	Utils().ViewConfig()
 	
 def main_cmc_cmd():
 	Globals.TERM.fork_command(Globals.myCMC_VT_TITLE)
@@ -289,7 +296,7 @@ def compile_or_sync(arg):
 		PID = i[1]
 
 		if RUN == "ROOM":
-			Globals().CDial(gtk.MESSAGE_INFO, "<small>Running roomservice", "Roomservice is running right now, you will have to run, \"<b>Compile</b>\" again after this is done downloading your kernel and device dependancies.</small>")
+			Utils().CDial(gtk.MESSAGE_INFO, "<small>Running roomservice", "Roomservice is running right now, you will have to run, \"<b>Compile</b>\" again after this is done downloading your kernel and device dependancies.</small>")
 
 def main_sync_compile_btn(obj, arg):
 	compile_or_sync(arg)
@@ -439,7 +446,7 @@ class advanced():
 		SpacerELB  = gtk.Label()
 		SpacerELB .show()
 		
-		table.attach(TERM_FRAME, 1, 2, 0, 1, xpadding=10, ypadding=10)
+		table.attach(TERM_FRAME, 0, 1, 0, 1, xpadding=10, ypadding=10)
 		
 		tableB.attach(SpacerRT, 0, 1, 0, 1, xpadding=25, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
 		tableB.attach(SpacerRB, 0, 1, 1, 2, xpadding=25, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
