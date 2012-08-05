@@ -431,7 +431,7 @@ class advanced():
 		LinkFrame = gtk.Frame()
 		LinkFrame.set_label_widget(Globals.LinkContact)
 		LinkFrame.set_shadow_type(gtk.SHADOW_NONE)
-		LinkFrame.set_border_width(1)
+		LinkFrame.set_border_width(5)
 		LinkFrame.add(LinksTable)
 
 		count = 0
@@ -471,8 +471,8 @@ class advanced():
 		tableB.attach(compile_btn, 4, 5, 1, 2, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
 		tableB.attach(Globals.syncLab, 5, 6, 0, 1, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
 		tableB.attach(sync_btn, 5, 6, 1, 2, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
-		tableB.attach(Globals.build_appLab, 6, 7, 0, 1, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
-		tableB.attach(entryBox, 6, 7, 1, 2, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
+		tableB.attach(entryBox, 6, 7, 0, 1, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
+		tableB.attach(Globals.build_appLab, 6, 7, 1, 2, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
 
 		Update().TEXT_COLOR()
 
