@@ -91,7 +91,6 @@ Any bugs? Please report them <a href=\"mailto:https://github.com/lithid/Cmcompil
 	makeLab = gtk.Label()
 	compileLab = gtk.Label()
 	syncLab = gtk.Label()
-	toolsLab = gtk.Label()
 	build_appLab = gtk.Label()
 	TERM = vte.Terminal()
 	TERM.set_font_from_string("Ubuntu Mono 9")

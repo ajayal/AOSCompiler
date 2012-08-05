@@ -102,14 +102,14 @@ class Parser():
 		elif getBackColor:
 			config.set(title, 'background_color', getBackColor)
 		else:
-			config.set(title, 'background_color', '#323231')
+			config.set(title, 'background_color', '#3c3b37')
 
 		if arg == "text_color":
 			config.set(title, 'text_color', value)
 		elif getTextColor:
 			config.set(title, 'text_color', getTextColor)
 		else:
-			config.set(title, 'text_color', '#5997b7')
+			config.set(title, 'text_color', '#fff')
 
 		with open(Globals.myCONF, 'wb') as configfile:
     			config.write(configfile)
