@@ -42,14 +42,15 @@ class Update():
 		if r == "Default":
 			r = Globals.myDEF_REPO_PATH
 		Globals.branchLab.set_markup("<span color=\"%s\"><small>Branch</small></span>" % myColor)
+		Globals.LinkContact.set_markup("<span color=\"%s\">Contact</span>" % myColor)
 		Globals.deviceLab.set_markup("<span color=\"%s\"><small>Device</small></span>" % myColor)
 		Globals.syncjobsLab.set_markup("<span color=\"%s\"><small>Sync jobs</small></span>" % myColor)
 		Globals.makeLab.set_markup("<span color=\"%s\"><small>Make jobs</small></span>" % myColor)
 		Globals.compileLab.set_markup("<span color=\"%s\"><small>Compile</small></span>" % myColor)
 		Globals.syncLab.set_markup("<span color=\"%s\"><small>Sync</small></span>" % myColor)
-		Globals.build_appLab.set_markup("<span color=\"%s\"><small>Build specific <b>app/binary</b> here. :: <b>enter</b> ::</small></span>" % myColor)
-		Globals.KEY_BIND_INFO.set_markup("<small><small><span color=\"%s\">[CTL-L + (<b>v</b> = View config, <b>a</b> = Start adb, <b>m</b> = Main start/stop, <b>s</b> = Sync, <b>b</b> = build/compile, <b>r</b> = Repo path) <b>esc</b> = Quit]</span></small></small>" % myColor)
-		Globals.MAIN_INFO.set_markup("<span color=\"%s\"><small>Device: <b>%s</b> <big>|</big> Branch: <b>%s</b> <big>|</big> Repo path: <b>%s</b></small></span>" % (myColor, d,b,r))
+		Globals.build_appLab.set_markup("<span color=\"%s\"><small><small>Build specific <b>app/binary</b> here. :: <b>enter</b> ::</small></small></span>" % myColor)
+		Globals.KEY_BIND_INFO.set_markup("<small><small><small><span color=\"%s\">[CTL-L + (<b>v</b> = View config, <b>a</b> = Start adb, <b>m</b> = Main start/stop, <b>s</b> = Sync, <b>b</b> = build/compile, <b>r</b> = Repo path) <b>esc</b> = Quit]</span></small></small></small>" % myColor)
+		Globals.MAIN_INFO.set_markup("<span color=\"%s\"><small><small>Device: <b>%s</b> <big>|</big> Branch: <b>%s</b> <big>|</big> Repo path: <b>%s</b></small></small></span>" % (myColor, d,b,r))
 
 	def TEXT_COLOR_DIALOG(self):
 		d = Update().GET_COLOR()

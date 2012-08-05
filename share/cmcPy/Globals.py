@@ -22,7 +22,6 @@ class Globals():
 	myTermWall = "%s/termwall.jpg" % myIMGS
 	myTHEME = "%s/theme/" % myIMGS
 	myBASH = "/usr/share/cmcompiler/cmcBash"
-	myColor = "white"
 
 	# VTE Commands
 	mySYNC_SCRIPT = "%s/sync_script.sh" % myBASH
@@ -84,6 +83,7 @@ Any bugs? Please report them <a href=\"mailto:https://github.com/lithid/Cmcompil
 	DEV_BTN = gtk.Button("Meh")
 	KEY_BIND_INFO = gtk.Label()
 	MAIN_INFO = gtk.Label()
+	LinkContact = gtk.Label()
 
 	branchLab = gtk.Label()
 	deviceLab = gtk.Label()

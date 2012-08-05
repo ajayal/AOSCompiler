@@ -36,13 +36,10 @@ def openBuildFolder():
 	t = "%s/out/target/product/%s" % (repo_path, build_device)
 	cmd = "nautilus %s" % (t)
 	os.system(cmd)
-	sys.exit()
 
 def openFolder(obj):
 	t = "%s/Downloads" % (u_home)
 	cmd = "nautilus %s" % (t)
-	os.system(cmd)
-	gtk.main_quit()
 
 def custom_listdir(path):
 	dirs = sorted([d for d in os.listdir(path) if os.path.isdir(path + os.path.sep + d)])
@@ -301,6 +298,9 @@ def compile_or_sync(arg):
 		if RUN == "ROOM":
 			Utils().CDial(gtk.MESSAGE_INFO, "<small>Running roomservice", "Roomservice is running right now, you will have to run, \"<b>Compile</b>\" again after this is done downloading your kernel and device dependancies.</small>")
 
+def hit_event_btn(obj, event):
+	print "Pressed event button"
+
 def main_sync_compile_btn(obj, arg):
 	compile_or_sync(arg)
 
@@ -357,9 +357,6 @@ class advanced():
 		table.show()
 
 		Globals.MAIN_INFO.show()
-		MAIN_VBOX.pack_start(Globals.MAIN_INFO, False, False, 5)
-
-		MAIN_VBOX.pack_start(table, True, True, 0)
 
 		tableB = gtk.Table(1, 2, False)
 		tableB.show()
@@ -377,15 +374,10 @@ class advanced():
 		frameB.set_shadow_type(gtk.SHADOW_NONE)
 		frameB.show()
 
-		MAIN_VBOX.pack_start(frameB, True, True, 0)
-
 		tableEntry = gtk.Table(1, 2, False)
 		tableEntry.show()
 
-		MAIN_VBOX.pack_start(tableEntry, True, True, 5)
-
 		Globals.KEY_BIND_INFO.show()
-		MAIN_VBOX.pack_start(Globals.KEY_BIND_INFO, False, False, 5)
 
 		branchCombo.show()
 		i = get_branch_combo()
@@ -434,15 +426,36 @@ class advanced():
 		
 		Globals.build_appLab.show()
 		
-		SpacerERT = gtk.Label()
-		SpacerERT .show()
-		SpacerELT  = gtk.Label()
-		SpacerELT .show()
+		LinksTable = gtk.Table(2, 1, False)
+		LinksTable.show()
+		LinkFrame = gtk.Frame()
+		LinkFrame.set_label_widget(Globals.LinkContact)
+		LinkFrame.set_shadow_type(gtk.SHADOW_NONE)
+		LinkFrame.set_border_width(1)
+		LinkFrame.add(LinksTable)
 
-		SpacerERB = gtk.Label()
-		SpacerERB .show()
-		SpacerELB  = gtk.Label()
-		SpacerELB .show()
+		count = 0
+		LinkList = ["Gmail", "Twitter", "GooglePlus", "Xda", "Youtube", "Gallery"]
+		for i in LinkList:
+			count+=1
+			name = "%s/%s.png" % (Globals.myIMGS, i)
+			image = gtk.Image()
+			image.set_from_file(name)
+			image.show()
+			event = gtk.EventBox()
+			event.connect("button_press_event", hit_event_btn)
+			event.add(image)
+			event.set_size_request(32, 32)
+			event.show()
+			tooltip = gtk.Tooltips()
+			tooltip.set_tip(event, i)
+			LinksTable.attach(event, count-1, count, 0, 1, xpadding=1, ypadding=1, xoptions=gtk.FILL, yoptions=gtk.FILL)
+
+		MAIN_VBOX.pack_start(Globals.MAIN_INFO, False, False, 0)
+		MAIN_VBOX.pack_start(Globals.KEY_BIND_INFO, False, False, 0)
+		MAIN_VBOX.pack_start(table, True, True, 0)
+		MAIN_VBOX.pack_start(frameB, True, True, 0)
+		MAIN_VBOX.pack_start(LinkFrame, True, True, 0)
 		
 		table.attach(TERM_FRAME, 0, 1, 0, 1, xpadding=10, ypadding=10)
 		
@@ -458,13 +471,8 @@ class advanced():
 		tableB.attach(compile_btn, 4, 5, 1, 2, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
 		tableB.attach(Globals.syncLab, 5, 6, 0, 1, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
 		tableB.attach(sync_btn, 5, 6, 1, 2, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
-
-		tableEntry.attach(SpacerERT, 0, 1, 0, 1, xpadding=25, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
-		tableEntry.attach(SpacerERB, 0, 1, 1, 2, xpadding=25, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
-		tableEntry.attach(Globals.build_appLab, 1, 2, 0, 1, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
-		tableEntry.attach(entryBox, 1, 2, 1, 2, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
-		tableEntry.attach(SpacerELT, 2, 3, 0, 1, xpadding=25, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
-		tableEntry.attach(SpacerELB, 2, 3, 1, 2, xpadding=25, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
+		tableB.attach(Globals.build_appLab, 6, 7, 0, 1, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
+		tableB.attach(entryBox, 6, 7, 1, 2, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
 
 		Update().TEXT_COLOR()
 
