@@ -76,12 +76,14 @@ class Utils():
 		if m == None:
 			print "Here"
 			os.chdir(p)
+			Globals.TERM.set_background_saturation(0.3)
 			PID = Globals.TERM.fork_command('bash')
 			Globals.TERM.feed_child('clear\n')
 			Globals.TERM.feed_child('python build/tools/roomservice.py cm_%s\n' % d)
 			RUN = "ROOM"
 		else:
 			Parser().write("manuf", m)
+			Globals.TERM.set_background_saturation(0.3)
 			PID = Globals.TERM.fork_command(Globals.myCOMPILE_SCRIPT)
 			RUN = "COMP"
 

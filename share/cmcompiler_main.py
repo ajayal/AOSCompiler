@@ -21,6 +21,8 @@ import platform
 import sys
 import time
 import webbrowser
+import shutil
+import subprocess
 
 from cmcPy.About import About
 from cmcPy.Globals import Globals
@@ -33,13 +35,13 @@ from cmcPy.Utils import Utils
 ######################################################################
 
 def openBuildFolder():
-	t = "%s/out/target/product/%s" % (repo_path, build_device)
-	cmd = "nautilus %s" % (t)
-	os.system(cmd)
-
-def openFolder(obj):
-	t = "%s/Downloads" % (u_home)
-	cmd = "nautilus %s" % (t)
+	r = Parser().read("repo_path")
+	d = Parser().read("device")
+	t = "%s/out/target/product/%s" % (r, d)
+	if os.path.exists(t):
+		subprocess.call(('xdg-open', t))
+	else:
+		Utils().CDial(gtk.MESSAGE_ERROR, "No out folder", "Need to compile before you can do this silly!")
 
 def custom_listdir(path):
 	dirs = sorted([d for d in os.listdir(path) if os.path.isdir(path + os.path.sep + d)])
@@ -110,7 +112,7 @@ def compile_button_clicked(obj):
 myMAIN_ICON = gtk.gdk.pixbuf_new_from_file(Globals.myICON)
 
 toolsCombo = gtk.combo_box_new_text()
-for i in ["Options", "Start adb", "View config", "Repo path", "Remove config", "Run bash", "Add device", "Stop/reset"]:
+for i in ["Options", "Start adb", "View config", "Repo path", "Remove config", "Run bash", "Add device", "Stop/reset", "Open rom folder"]:
 	toolsCombo.append_text("%s" % i)
 
 branchCombo = gtk.combo_box_new_text()
@@ -155,7 +157,7 @@ def run_custom_device():
 	table = gtk.Table(8, 1, False)
 	dialog.vbox.pack_start(table)
 	label = gtk.Label()
-	label.set_markup("Device name:>")
+	label.set_markup("Device name:")
 	label.show()
 	entry = gtk.Entry()
 	entry.show()
@@ -194,7 +196,10 @@ def run_custom_device():
 		manu_path = "%s/device/%s" % (r,m)
 		if not os.path.exists(manu_path):
 			os.mkdir(manu_path)
+		if os.path.exists("%s/%s" % (manu_path, n)):
+			shutil.rmtree("%s/%s" % (manu_path, n))
 		os.chdir(manu_path)
+		Globals.TERM.set_background_saturation(0.3)
 		Globals.TERM.fork_command('bash')
 		Globals.TERM.feed_child('git clone %s -b %s %s\n' % (u,b,n))
 	else:
@@ -226,6 +231,8 @@ def tools_combo_change(event):
 		run_custom_device()
 	elif value == 7:
 		main_cmc_cmd()
+	elif value == 8:
+		openBuildFolder()
 	else:
 		pass
 
@@ -273,13 +280,14 @@ def start_adb():
 
 def view_config():
 	Utils().ViewConfig()
-	
+
 def main_cmc_cmd():
 	Globals.TERM.set_background_saturation(1.0)
 	Globals.TERM.fork_command('clear')
 	
 def compile_or_sync(arg):
 	if arg == "Syncing":
+		Globals.TERM.set_background_saturation(0.3)
 		Globals.TERM.fork_command(Globals.mySYNC_SCRIPT)
 	elif arg == "Compiling":
 		i = str(Utils().Compile())

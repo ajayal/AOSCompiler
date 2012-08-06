@@ -69,5 +69,6 @@ if [ "$branch" == "ics" ] || [ "$branch" == "jellybean" ]; then
         fi
 fi
 
+bash vendor/cm/get-prebuilts
 source build/envsetup.sh
 brunch ${device}
