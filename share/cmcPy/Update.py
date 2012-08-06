@@ -16,47 +16,23 @@ from Parser import Parser
 import urllib
 
 class Update():
-	def GET_COLOR(self):
-		myColor = None
-		colord = gtk.ColorSelectionDialog("Choose color")
-		selector = colord.get_color_selection()
-		response = colord.run()
-		if response == gtk.RESPONSE_OK:
-			myColor = str(selector.get_current_color())
-		colord.destroy()
-		return myColor
-
-	def BACKGROUND_COLOR(self):
-		d = Update().GET_COLOR()
-
-		if d is not None:
-			Parser().write("background_color", d)
-			color = gtk.gdk.color_parse(d)
-			Globals.MAIN_WIN.modify_bg(gtk.STATE_NORMAL, color)
-
 	def TEXT_COLOR(self):
-		myColor = Parser().read("text_color")
+		myColor = Globals.myTextColor
 		b = Parser().read("branch")
 		d = Parser().read("device")
 		r = Parser().read("repo_path")
 		if r == "Default":
 			r = Globals.myDEF_REPO_PATH
-		Globals.branchLab.set_markup("<span color=\"%s\"><small>Branch</small></span>" % myColor)
+		Globals.branchLab.set_markup("<span color=\"%s\">Branch</span>" % myColor)
 		Globals.LinkContact.set_markup("<span color=\"%s\">Contact</span>" % myColor)
-		Globals.deviceLab.set_markup("<span color=\"%s\"><small>Device</small></span>" % myColor)
-		Globals.syncjobsLab.set_markup("<span color=\"%s\"><small>Sync jobs</small></span>" % myColor)
-		Globals.makeLab.set_markup("<span color=\"%s\"><small>Make jobs</small></span>" % myColor)
-		Globals.compileLab.set_markup("<span color=\"%s\"><small>Compile</small></span>" % myColor)
-		Globals.syncLab.set_markup("<span color=\"%s\"><small>Sync</small></span>" % myColor)
+		Globals.deviceLab.set_markup("<span color=\"%s\">Device</span>" % myColor)
+		Globals.syncjobsLab.set_markup("<span color=\"%s\">Sync jobs</span>" % myColor)
+		Globals.makeLab.set_markup("<span color=\"%s\">Make jobs</span>" % myColor)
+		Globals.compileLab.set_markup("<span color=\"%s\">Compile</span>" % myColor)
+		Globals.syncLab.set_markup("<span color=\"%s\">Sync</span>" % myColor)
 		Globals.build_appLab.set_markup("<span color=\"%s\"><small><small>Build specific <b>app/binary</b> here. :: <b>enter</b> ::</small></small></span>" % myColor)
 		Globals.KEY_BIND_INFO.set_markup("<small><small><span color=\"%s\">[CTL-L + (<b>v</b> = View config, <b>a</b> = Start adb, <b>m</b> = Main start/stop, <b>s</b> = Sync, <b>b</b> = build/compile, <b>r</b> = Repo path) <b>esc</b> = Quit]</span></small></small>" % myColor)
 		Globals.MAIN_INFO.set_markup("<span color=\"%s\"><small>Device: <b>%s</b> <big>|</big> Branch: <b>%s</b> <big>|</big> Repo path: <b>%s</b></small></span>" % (myColor, d,b,r))
-
-	def TEXT_COLOR_DIALOG(self):
-		d = Update().GET_COLOR()
-		if d is not None:
-			Parser().write("text_color", d)
-			Update().TEXT_COLOR()
 
 	def DEVICES(self):
 		def callback_device(widget, data=None):
@@ -82,8 +58,6 @@ class Update():
 		if chk_config == 1:
 			dialog = gtk.Dialog("Choose device", None, gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT, (gtk.STOCK_CANCEL, gtk.RESPONSE_REJECT, gtk.STOCK_OK, gtk.RESPONSE_ACCEPT))
 			dialog.set_size_request(260, 400)
-			color = gtk.gdk.color_parse(Parser().read('background_color'))
-			dialog.modify_bg(gtk.STATE_NORMAL, color)
 			dialog.set_resizable(False)
 
 			scroll = gtk.ScrolledWindow()

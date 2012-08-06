@@ -19,15 +19,11 @@ from Parser import Parser
 
 class Utils():
 	def ViewConfig(self):
-		myColor = Parser().read("text_color")
-
 		def btn(obj):
 			Globals().CDial(gtk.MESSAGE_INFO, "Configuration removed", "Your configuration has been removed. Please restart the application to re-configure.")
 
 		dialog = gtk.Dialog("Cmcompiler", None, gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT, (gtk.STOCK_CANCEL, gtk.RESPONSE_REJECT, gtk.STOCK_OK, gtk.RESPONSE_ACCEPT))
-		dialog.set_size_request(800, 400)
-		color = gtk.gdk.color_parse(Parser().read('background_color'))
-		dialog.modify_bg(gtk.STATE_NORMAL, color)
+		dialog.set_size_request(600, 400)
 		dialog.set_resizable(False)
 		sw = gtk.ScrolledWindow()
 		sw.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
@@ -38,7 +34,7 @@ class Utils():
 		frame = gtk.Frame()
 		frame.add(sw)
 		frame_label = gtk.Label()
-		frame_label.set_markup("<span color=\"%s\">Configuration</span>" % myColor)
+		frame_label.set_markup("Configuration:")
 		frame_label.show()
 		frame.set_label_widget(frame_label)
 		frame.set_border_width(15)
@@ -111,23 +107,17 @@ class Utils():
 			return None
 
 	def CDial(self, dialog_type, title, message):
-		myColor = Parser().read("text_color")
-		color = gtk.gdk.color_parse(Parser().read('background_color'))
 		dialog = gtk.MessageDialog(None, gtk.DIALOG_MODAL, type=dialog_type, buttons=gtk.BUTTONS_OK)
-		dialog.set_markup("<span color=\"%s\"><b>%s</b></span>" % (myColor, title))
-		dialog.modify_bg(gtk.STATE_NORMAL, color)
-		dialog.format_secondary_markup("<span color=\"%s\">%s</span>" % (myColor, message))
+		dialog.set_markup(title)
+		dialog.format_secondary_markup(message)
 		dialog.run()
 		dialog.destroy()
 		return True
 
 	def QDial(self, title, message):
-		myColor = Parser().read("text_color")
-		color = gtk.gdk.color_parse(Parser().read('background_color'))
 		dialog = gtk.MessageDialog(None, gtk.DIALOG_MODAL, type=gtk.MESSAGE_QUESTION, buttons=gtk.BUTTONS_YES_NO)
-		dialog.set_markup("<span color=\"%s\"><b>%s</b></span>" % (myColor, title))
-		dialog.modify_bg(gtk.STATE_NORMAL, color)
-		dialog.format_secondary_markup("<span color=\"%s\">%s</span>" % (myColor, message))
+		dialog.set_markup(title)
+		dialog.format_secondary_markup(message)
 		response = dialog.run()
 		dialog.destroy()
 

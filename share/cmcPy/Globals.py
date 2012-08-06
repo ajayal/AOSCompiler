@@ -21,7 +21,12 @@ class Globals():
 	myICON = "%s/cmc-icon.png" % myIMGS
 	myTermWall = "%s/termwall.jpg" % myIMGS
 	myTHEME = "%s/theme/" % myIMGS
+	SyncImg = "%s/sync.png" % myIMGS
+	CompileImg = "%s/compile.png" % myIMGS
+	DeviceImg = "%s/device.png" % myIMGS
 	myBASH = "/usr/share/cmcompiler/cmcBash"
+	myTextColor = "white"
+	myBackgroundColor = "#3c3b37"
 
 	# VTE Commands
 	mySYNC_SCRIPT = "%s/sync_script.sh" % myBASH
@@ -80,7 +85,7 @@ Any bugs? Please report them <a href=\"mailto:https://github.com/lithid/Cmcompil
 	numprocs = [ int(line.strip()[-1]) for line in open('/proc/cpuinfo', 'r') if line.startswith('processor') ][-1] + 1
 
 	MAIN_WIN = gtk.Window(gtk.WINDOW_TOPLEVEL)
-	DEV_BTN = gtk.Button("Meh")
+	DEV_BTN = gtk.Button()
 	KEY_BIND_INFO = gtk.Label()
 	MAIN_INFO = gtk.Label()
 	LinkContact = gtk.Label()

@@ -110,7 +110,7 @@ def compile_button_clicked(obj):
 myMAIN_ICON = gtk.gdk.pixbuf_new_from_file(Globals.myICON)
 
 toolsCombo = gtk.combo_box_new_text()
-for i in ["Options", "Start adb", "View config", "Repo path", "Remove config", "Run bash", "Add device", "Stop/reset", "Background color", "Text color"]:
+for i in ["Options", "Start adb", "View config", "Repo path", "Remove config", "Run bash", "Add device", "Stop/reset"]:
 	toolsCombo.append_text("%s" % i)
 
 branchCombo = gtk.combo_box_new_text()
@@ -147,33 +147,30 @@ def run_local_shell():
 	Globals.TERM.fork_command('bash')
 
 def run_custom_device():
-	myColor = Parser().read("text_color")
-	color = gtk.gdk.color_parse(Parser().read('background_color'))
 	title = "Setup custom device"
 	message = "Please setup your device here:"
 	dialog = gtk.MessageDialog(None, gtk.DIALOG_MODAL, type=gtk.MESSAGE_INFO, buttons=gtk.BUTTONS_OK)
-	dialog.set_markup("<span color=\"%s\"><b>%s</b></span>" % (myColor, title))
-	dialog.modify_bg(gtk.STATE_NORMAL, color)
-	dialog.format_secondary_markup("<span color=\"%s\">%s</span>" % (myColor, message))
+	dialog.set_markup(title)
+	dialog.format_secondary_markup(message)
 	table = gtk.Table(8, 1, False)
 	dialog.vbox.pack_start(table)
 	label = gtk.Label()
-	label.set_markup("<span color=\"%s\">Device name</span>" % myColor)
+	label.set_markup("Device name:>")
 	label.show()
 	entry = gtk.Entry()
 	entry.show()
 	label1 = gtk.Label()
-	label1.set_markup("<span color=\"%s\">Device manufacturer</span>" % myColor)
+	label1.set_markup("Device manufacturer:")
 	label1.show()
 	entry1 = gtk.Entry()
 	entry1.show()
 	label2 = gtk.Label()
-	label2.set_markup("<span color=\"%s\">Device tree url</span>" % myColor)
+	label2.set_markup("Device tree url:")
 	label2.show()
 	entry2 = gtk.Entry()
 	entry2.show()
 	label3 = gtk.Label()
-	label3.set_markup("<span color=\"%s\">Device tree branch</span>" % myColor)
+	label3.set_markup("Device tree branch:")
 	label3.show()
 	entry3 = gtk.Entry()
 	entry3.show()
@@ -229,10 +226,6 @@ def tools_combo_change(event):
 		run_custom_device()
 	elif value == 7:
 		main_cmc_cmd()
-	elif value == 8:
-		Update().BACKGROUND_COLOR()
-	elif value == 9:
-		Update().TEXT_COLOR_DIALOG()
 	else:
 		pass
 
@@ -341,7 +334,7 @@ class advanced():
 		Globals.MAIN_WIN.connect("key_press_event", self.on_key_press)
 		Globals.MAIN_WIN.set_events(gtk.gdk.KEY_PRESS_MASK)
 		Globals.MAIN_WIN.set_events(gtk.gdk.CONTROL_MASK)
-		color = gtk.gdk.color_parse(Parser().read('background_color'))
+		color = gtk.gdk.color_parse(Globals.myBackgroundColor)
 		Globals.MAIN_WIN.modify_bg(gtk.STATE_NORMAL, color)
 		Globals.MAIN_WIN.set_size_request(1080, 600)
 		Globals.MAIN_WIN.set_resizable(False)
@@ -387,7 +380,9 @@ class advanced():
 
 		Globals.branchLab.show()
 		
-		Globals.DEV_BTN.set_size_request(140, 28)
+		DevImg = gtk.Image()
+		DevImg.set_from_file(Globals.DeviceImg)
+		Globals.DEV_BTN.set_image(DevImg)
 		Globals.DEV_BTN.connect("clicked", device_button)
 		Globals.DEV_BTN.show()
 
@@ -406,16 +401,20 @@ class advanced():
 		makeCombo.connect("changed", compile_combo_change)
 		
 		Globals.makeLab.show()
-		
-		compile_btn = gtk.Button("Compile")
-		compile_btn.set_size_request(140, 28)
+
+		CompImg = gtk.Image()
+		CompImg.set_from_file(Globals.CompileImg)
+		compile_btn = gtk.Button()
+		compile_btn.set_image(CompImg)
 		compile_btn.connect("clicked", main_sync_compile_btn, "Compiling")
 		compile_btn.show()
 
 		Globals.compileLab.show()
-		
-		sync_btn = gtk.Button("Sync")
-		sync_btn.set_size_request(140, 28)
+
+		SyImg = gtk.Image()
+		SyImg.set_from_file(Globals.SyncImg)
+		sync_btn = gtk.Button()
+		sync_btn.set_image(SyImg)
 		sync_btn.connect("clicked", main_sync_compile_btn, "Syncing")
 		sync_btn.show()
 
