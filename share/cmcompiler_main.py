@@ -87,25 +87,25 @@ def get_askConfirm():
 		askedClicked()
 	else:
 		exit()
-                
+
 def download_clicked(obj):
 	webbrowser.open_new_tab(Globals.myGETCM)
-        
+
 def cm_wiki_clicked(obj):
 	webbrowser.open_new_tab(Globals.myCMWIKI)
-        
+
 def aosp_site_clicked(obj):
 	webbrowser.open_new_tab(Globals.myAOSP_SITE)
 
 def main_about(obj):
 	About().main()
-		
+
 def sync_button_clicked(obj):
 	vteterminal("Syncing")
 
 def compile_button_clicked(obj):
 	vteterminal("Compiling")
-    		
+
 ######################################################################
 # Some GTK globals
 ######################################################################
@@ -143,7 +143,7 @@ def run_vt_command(event):
 	Globals.TERM.feed_child('. build/envsetup.sh\n')
 	Globals.TERM.feed_child('lunch cm_%s-userdebug\n' % d)
 	Globals.TERM.feed_child('make -j%s %s\n' % (Globals.numprocs, i))
-	
+
 def run_local_shell():
 	Globals.TERM.set_background_saturation(0.3)
 	Globals.TERM.fork_command('bash')
@@ -214,7 +214,7 @@ def get_branch_combo():
 		return 1
 	elif r == "jellybean":
 		return 2
-		
+
 def tools_combo_change(event):
 	value = int(toolsCombo.get_active())
 	if value == 1:
@@ -241,7 +241,7 @@ def tools_combo_change(event):
 def compile_combo_change(event):
 	value = str(makeCombo.get_active_text())
 	Parser().write("make_jobs", value)
-        
+
 def sync_combo_change(event):
 	value = str(syncCombo.get_active_text())
 	Parser().write("sync_jobs", value)
@@ -251,10 +251,13 @@ def branch_combo_change(event):
 	Parser().write("branch", value)
 	Parser().write("device", "None")
 	Update().TEXT_COLOR()
-        
+
 def device_button(event):
 	Update().DEVICES()
 	Update().TEXT_COLOR()
+
+def clobber_button(event):
+	print "clobbering it now"
 
 def choose_repo_path():
 	direct = gtk.FileChooserDialog("Repo path...", action=gtk.FILE_CHOOSER_ACTION_SELECT_FOLDER, buttons=(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL, gtk.STOCK_OK, gtk.RESPONSE_ACCEPT))
@@ -284,7 +287,7 @@ def view_config():
 def main_cmc_cmd():
 	Globals.TERM.set_background_saturation(1.0)
 	Globals.TERM.fork_command('clear')
-	
+
 def compile_or_sync(arg):
 	if arg == "Syncing":
 		Globals.TERM.set_background_saturation(0.3)
@@ -299,8 +302,8 @@ def compile_or_sync(arg):
 		if RUN == "ROOM":
 			Utils().CDial(gtk.MESSAGE_INFO, "<small>Running roomservice", "Roomservice is running right now, you will have to run, \"<b>Compile</b>\" again after this is done downloading your kernel and device dependancies.</small>")
 
-def hit_event_btn(obj, event):
-	print "Pressed event button"
+def hit_event_btn(obj, event, arg):
+	print "Pressed event button: %s" % arg
 
 def main_sync_compile_btn(obj, arg):
 	compile_or_sync(arg)
@@ -312,7 +315,7 @@ class advanced():
  
 	def main_quit(self, widget, event=None):
 		gtk.main_quit()
-		
+
 	def on_key_press(self, widget, data=None):
 		i = gtk.gdk.keyval_name(data.keyval)
 
@@ -344,11 +347,11 @@ class advanced():
 		Globals.MAIN_WIN.set_events(gtk.gdk.CONTROL_MASK)
 		color = gtk.gdk.color_parse(Globals.myBackgroundColor)
 		Globals.MAIN_WIN.modify_bg(gtk.STATE_NORMAL, color)
-		Globals.MAIN_WIN.set_size_request(1080, 600)
+		Globals.MAIN_WIN.set_size_request(1080, 638)
 		Globals.MAIN_WIN.set_resizable(False)
 
 		MAIN_VBOX = gtk.VBox(False, 0)
-		
+
 		TERM_FRAME = gtk.Frame()
 		TERM_FRAME.show()
 		Globals.TERM.show()
@@ -387,7 +390,7 @@ class advanced():
 		branchCombo.connect("changed", branch_combo_change)
 
 		Globals.branchLab.show()
-		
+
 		DevImg = gtk.Image()
 		DevImg.set_from_file(Globals.DeviceImg)
 		Globals.DEV_BTN.set_image(DevImg)
@@ -395,19 +398,19 @@ class advanced():
 		Globals.DEV_BTN.show()
 
 		Globals.deviceLab.show()
-		
+
 		syncCombo.show()
 		syncCombo.set_active(int(Parser().read("sync_jobs"))-1)
 		syncCombo.set_wrap_width(4)
 		syncCombo.connect("changed", sync_combo_change)
 
 		Globals.syncjobsLab.show()
-		
+
 		makeCombo.show()
 		makeCombo.set_active(int(Parser().read("make_jobs"))-1)
 		makeCombo.set_wrap_width(4)
 		makeCombo.connect("changed", compile_combo_change)
-		
+
 		Globals.makeLab.show()
 
 		CompImg = gtk.Image()
@@ -430,9 +433,17 @@ class advanced():
 
 		entryBox.show()
 		entryBox.connect("activate", run_vt_command)
-		
+
 		Globals.build_appLab.show()
-		
+
+		ClobberImg = gtk.Image()
+		ClobberImg.set_from_file(Globals.ClobImg)
+		Globals.clobberBtn.set_image(ClobberImg)
+		Globals.clobberBtn.connect("clicked", clobber_button)
+		Globals.clobberBtn.show()
+
+		Globals.clobberLab.show()
+
 		LinksTable = gtk.Table(2, 1, False)
 		LinksTable.show()
 		LinkFrame = gtk.Frame()
@@ -450,7 +461,7 @@ class advanced():
 			image.set_from_file(name)
 			image.show()
 			event = gtk.EventBox()
-			event.connect("button_press_event", hit_event_btn)
+			event.connect("button_press_event", hit_event_btn, i)
 			event.add(image)
 			event.set_size_request(32, 32)
 			event.show()
@@ -463,23 +474,39 @@ class advanced():
 		MAIN_VBOX.pack_start(table, True, True, 0)
 		MAIN_VBOX.pack_start(frameB, True, True, 0)
 		MAIN_VBOX.pack_start(LinkFrame, True, True, 0)
-		
+
+		SpacerRT = gtk.Label()
+		SpacerRT .show()
+		SpacerLT  = gtk.Label()
+		SpacerLT .show()
+
+		SpacerRB = gtk.Label()
+		SpacerRB .show()
+		SpacerLB  = gtk.Label()
+		SpacerLB .show()
+
 		table.attach(TERM_FRAME, 0, 1, 0, 1, xpadding=10, ypadding=10)
-		
-		tableB.attach(Globals.branchLab, 0, 1, 0, 1, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
-		tableB.attach(branchCombo, 0, 1, 1, 2, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
-		tableB.attach(Globals.deviceLab, 1, 2, 0, 1, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
-		tableB.attach(Globals.DEV_BTN, 1, 2, 1, 2, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
-		tableB.attach(Globals.syncjobsLab, 2, 3, 0, 1, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
-		tableB.attach(syncCombo, 2, 3, 1, 2, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
-		tableB.attach(Globals.makeLab, 3, 4, 0, 1, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
-		tableB.attach(makeCombo, 3, 4, 1, 2, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
-		tableB.attach(Globals.compileLab, 4, 5, 0, 1, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
-		tableB.attach(compile_btn, 4, 5, 1, 2, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
-		tableB.attach(Globals.syncLab, 5, 6, 0, 1, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
-		tableB.attach(sync_btn, 5, 6, 1, 2, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
-		tableB.attach(entryBox, 6, 7, 0, 1, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
-		tableB.attach(Globals.build_appLab, 6, 7, 1, 2, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
+
+		tableB.attach(SpacerRT, 0, 1, 0, 1, xpadding=50, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
+		tableB.attach(SpacerRB, 0, 1, 1, 2, xpadding=50, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
+		tableB.attach(syncCombo, 1, 2, 0, 1, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
+		tableB.attach(Globals.syncjobsLab, 1, 2, 1, 2, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
+		tableB.attach(makeCombo, 2, 3, 0, 1, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
+		tableB.attach(Globals.makeLab, 2, 3, 1, 2, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
+		tableB.attach(branchCombo, 3, 4, 0, 1, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
+		tableB.attach(Globals.branchLab, 3, 4, 1, 2, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
+		tableB.attach(Globals.DEV_BTN, 4, 5, 0, 1, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
+		tableB.attach(Globals.deviceLab, 4, 5, 1, 2, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
+		tableB.attach(compile_btn, 5, 6, 0, 1, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
+		tableB.attach(Globals.compileLab, 5, 6, 1, 2, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
+		tableB.attach(sync_btn, 6, 7, 0, 1, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
+		tableB.attach(Globals.syncLab, 6, 7, 1, 2, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
+		tableB.attach(entryBox, 7, 8, 0, 1, xpadding=50, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
+		tableB.attach(Globals.build_appLab, 7, 8, 1, 2, xpadding=50, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
+		tableB.attach(Globals.clobberBtn, 8, 9, 0, 1, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
+		tableB.attach(Globals.clobberLab, 8, 9, 1, 2, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
+		tableB.attach(SpacerLT, 9, 10, 0, 1, xpadding=50, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
+		tableB.attach(SpacerLB, 9, 10, 1, 2, xpadding=50, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
 
 		Update().TEXT_COLOR()
 

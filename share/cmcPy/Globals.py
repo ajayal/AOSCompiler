@@ -24,6 +24,7 @@ class Globals():
 	SyncImg = "%s/sync.png" % myIMGS
 	CompileImg = "%s/compile.png" % myIMGS
 	DeviceImg = "%s/device.png" % myIMGS
+	ClobImg = "%s/clobber.png" % myIMGS
 	myBASH = "/usr/share/cmcompiler/cmcBash"
 	myTextColor = "white"
 	myBackgroundColor = "#3c3b37"
@@ -86,11 +87,13 @@ Any bugs? Please report them <a href=\"mailto:https://github.com/lithid/Cmcompil
 
 	MAIN_WIN = gtk.Window(gtk.WINDOW_TOPLEVEL)
 	DEV_BTN = gtk.Button()
+	clobberBtn = gtk.Button()
 	KEY_BIND_INFO = gtk.Label()
 	MAIN_INFO = gtk.Label()
 	LinkContact = gtk.Label()
 
 	branchLab = gtk.Label()
+	clobberLab = gtk.Label()
 	deviceLab = gtk.Label()
 	syncjobsLab = gtk.Label()
 	makeLab = gtk.Label()
