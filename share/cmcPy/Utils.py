@@ -13,11 +13,22 @@
 import os
 import gtk
 from glob import glob
+import commands
 
 from Globals import Globals
 from Parser import Parser
 
 class Utils():
+	def is_adb_running(self):
+		running = False
+		cmd = commands.getoutput("adb devices")
+		x = cmd.split(" ")
+		x = x[4]
+		if "device" in x:
+			running = True
+
+		return running
+
 	def ViewConfig(self):
 		def btn(obj):
 			Globals().CDial(gtk.MESSAGE_INFO, "Configuration removed", "Your configuration has been removed. Please restart the application to re-configure.")
@@ -65,29 +76,46 @@ class Utils():
 		dialog.destroy()
 
 	def Compile(self):
-		RUN = None
-		p = Parser().read("repo_path")
+		r = Parser().read("repo_path")
 		d = Parser().read("device")
 		b = Parser().read("branch")
-		if p == "Default":
-			p = Globals.myDEF_REPO_PATH
-		os.chdir(p)
+		if r == "Default":
+			r = Globals.myDEF_REPO_PATH
+		os.chdir(r)
 		m = Utils().getManu(d, b)
+		Globals.TERM.set_background_saturation(0.3)
+		Globals.TERM.fork_command('bash')
 		if m == None:
 			print "Here"
 			os.chdir(p)
-			Globals.TERM.set_background_saturation(0.3)
-			PID = Globals.TERM.fork_command('bash')
 			Globals.TERM.feed_child('clear\n')
 			Globals.TERM.feed_child('python build/tools/roomservice.py cm_%s\n' % d)
-			RUN = "ROOM"
+			Utils().CDial(gtk.MESSAGE_INFO, "<small>Running roomservice", "Roomservice is running right now, you will have to run, \"<b>Compile</b>\" again after this is done downloading your kernel and device dependancies.</small>")
 		else:
 			Parser().write("manuf", m)
-			Globals.TERM.set_background_saturation(0.3)
-			PID = Globals.TERM.fork_command(Globals.myCOMPILE_SCRIPT)
-			RUN = "COMP"
+			Globals.TERM.feed_child('clear\n')
+			if not os.path.exists("%s/vendor/%s" % (r, m)) and b is not "jellybean":
+				if Utils().is_abd_running() == True:
+					os.chdir("%s/devices/%s/%s/" % (r, m, d))
+					Globals.TERM.feed_child('clear\n')
+					Globals.TERM.feed_child('./extract-files.sh\n')
+				else:
+					Globals().CDial(gtk.MESSAGE_ERROR, "Adb isn't running", "Need adb to setup vendor files.\n\nIs this something you are going to do yourself?\n\nPlease try again.")
+					Globals.TERM.set_background_saturation(1.0)
+					Globals.TERM.feed_child('clear\n')
 
-		return "%s-%s" % (RUN, PID)
+			if not os.path.exists("%s/cacheran" % Globals.myCONF_DIR) and b is not "gingerbread":
+				os.chdir(r)
+				file("%s/cacheran" % myCONF_DIR, 'w').close()
+				Globals.TERM.feed_child('bash prebuilt/linux-x86/ccache/ccache -M 50G\n')
+
+			if b is not "gingerbread":
+				Globals.TERM.feed_child('bash vendor/cm/get-prebuilts\n')
+			else:
+				Globals.TERM.feed_child('bash vendor/cyanogen/get-rommanager\n')
+
+			Globals.TERM.feed_child('source build/envsetup.sh\n')
+			Globals.TERM.feed_child("brunch %s\n" % d)
 
 	def getManu(self, arg, br):
 		s = None
@@ -107,6 +135,22 @@ class Utils():
 			return s
 		else:
 			return None
+
+	def which(self, program):
+		def is_exe(fpath):
+			return os.path.isfile(fpath) and os.access(fpath, os.X_OK)
+
+		fpath, fname = os.path.split(program)
+		if fpath:
+			if is_exe(program):
+				return program
+		else:
+			for path in os.environ["PATH"].split(os.pathsep):
+				exe_file = os.path.join(path, program)
+				if is_exe(exe_file):
+					return exe_file
+
+		return None
 
 	def CDial(self, dialog_type, title, message):
 		dialog = gtk.MessageDialog(None, gtk.DIALOG_MODAL, type=dialog_type, buttons=gtk.BUTTONS_OK)

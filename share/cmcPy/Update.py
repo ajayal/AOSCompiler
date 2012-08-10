@@ -17,23 +17,27 @@ import urllib
 
 class Update():
 	def TEXT_COLOR(self):
-		myColor = Globals.myTextColor
 		b = Parser().read("branch")
 		d = Parser().read("device")
 		r = Parser().read("repo_path")
 		if r == "Default":
 			r = Globals.myDEF_REPO_PATH
-		Globals.branchLab.set_markup("<span color=\"%s\"><small>Branch</small></span>" % myColor)
-		Globals.LinkContact.set_markup("<span color=\"%s\">Contact</span>" % myColor)
-		Globals.deviceLab.set_markup("<span color=\"%s\"><small>Device</small></span>" % myColor)
-		Globals.syncjobsLab.set_markup("<span color=\"%s\"><small>Sync jobs</small></span>" % myColor)
-		Globals.makeLab.set_markup("<span color=\"%s\"><small>Make jobs</small></span>" % myColor)
-		Globals.compileLab.set_markup("<span color=\"%s\"><small>Compile</small></span>" % myColor)
-		Globals.syncLab.set_markup("<span color=\"%s\"><small>Sync</small></span>" % myColor)
-		Globals.clobberLab.set_markup("<span color=\"%s\"><small>Clobber</small></span>" % myColor)
-		Globals.build_appLab.set_markup("<span color=\"%s\"><small><small>Build specific <b>app/binary</b> here. :: <b>enter</b> ::</small></small></span>" % myColor)
-		Globals.KEY_BIND_INFO.set_markup("<small><small><span color=\"%s\">[CTL-L + (<b>v</b> = View config, <b>a</b> = Start adb, <b>m</b> = Main start/stop, <b>s</b> = Sync, <b>b</b> = build/compile, <b>r</b> = Repo path) <b>esc</b> = Quit]</span></small></small>" % myColor)
-		Globals.MAIN_INFO.set_markup("<span color=\"%s\"><small>Device: <b>%s</b> <big>|</big> Branch: <b>%s</b> <big>|</big> Repo path: <b>%s</b></small></span>" % (myColor, d,b,r))
+		Globals.branchLab.set_markup("<small>Branch</small>")
+		Globals.LinkContact.set_markup("<small>Contact</small>")
+		Globals.runLab.set_markup("<small>Run</small>")
+		Globals.romLab.set_markup("<small>Rom</small>")
+		Globals.toolsLab.set_markup("<small>Options</small>")
+		Globals.deviceLab.set_markup("<small>Device</small>")
+		Globals.syncjobsLab.set_markup("<small>Sync jobs</small>")
+		Globals.makeLab.set_markup("<small>Make jobs</small>")
+		Globals.compileLab.set_markup("<small>Compile</small>")
+		Globals.runFrameLab.set_markup("<small>Run options</small>")
+		Globals.buildFrameLab.set_markup("<small>Build options</small>")
+		Globals.syncLab.set_markup("<small>Sync</small>")
+		Globals.clobberLab.set_markup("<small>Clobber</small>")
+		Globals.build_appLab.set_markup("<small><small>Build specific <b>app/binary</b> here. :: <b>enter</b> ::</small></small>")
+		Globals.KEY_BIND_INFO.set_markup("<small><small>[CTL-L + (<b>v</b> = View config, <b>a</b> = Start adb, <b>m</b> = Main start/stop, <b>s</b> = Sync, <b>b</b> = build/compile, <b>r</b> = Repo path) <b>esc</b> = Quit]</small></small>")
+		Globals.MAIN_INFO.set_markup("<small>Device: <b>%s</b> <big>|</big> Branch: <b>%s</b> <big>|</big> Repo path: <b>%s</b></small>" % (d,b,r))
 
 	def DEVICES(self):
 		def callback_device(widget, data=None):

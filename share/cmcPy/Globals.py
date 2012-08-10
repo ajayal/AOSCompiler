@@ -26,8 +26,6 @@ class Globals():
 	DeviceImg = "%s/device.png" % myIMGS
 	ClobImg = "%s/clobber.png" % myIMGS
 	myBASH = "/usr/share/cmcompiler/cmcBash"
-	myTextColor = "white"
-	myBackgroundColor = "#3c3b37"
 
 	# VTE Commands
 	mySYNC_SCRIPT = "%s/sync_script.sh" % myBASH
@@ -87,12 +85,14 @@ Any bugs? Please report them <a href=\"mailto:https://github.com/lithid/Cmcompil
 
 	MAIN_WIN = gtk.Window(gtk.WINDOW_TOPLEVEL)
 	DEV_BTN = gtk.Button()
-	clobberBtn = gtk.Button()
+	runBtn = gtk.Button()
 	KEY_BIND_INFO = gtk.Label()
 	MAIN_INFO = gtk.Label()
+	runLab = gtk.Label()
+	romLab = gtk.Label()
 	LinkContact = gtk.Label()
-
 	branchLab = gtk.Label()
+	toolsLab = gtk.Label()
 	clobberLab = gtk.Label()
 	deviceLab = gtk.Label()
 	syncjobsLab = gtk.Label()
@@ -100,6 +100,11 @@ Any bugs? Please report them <a href=\"mailto:https://github.com/lithid/Cmcompil
 	compileLab = gtk.Label()
 	syncLab = gtk.Label()
 	build_appLab = gtk.Label()
+	buildFrameLab = gtk.Label()
+	runFrameLab = gtk.Label()
+	checkCompile = gtk.CheckButton()
+	checkSync = gtk.CheckButton()
+	checkClobber = gtk.CheckButton()
 	TERM = vte.Terminal()
 	TERM.set_font_from_string("Ubuntu Mono 9")
 	TERM.set_background_image_file(myTermWall)
