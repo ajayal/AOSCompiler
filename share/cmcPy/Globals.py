@@ -17,6 +17,7 @@ import vte
 class Globals():
 
 	# Resources
+	myMainTitle = "Android Open Source Compiler"
 	myIMGS = "/usr/share/cmcompiler/images"
 	myICON = "%s/cmc-icon.png" % myIMGS
 	myTermWall = "%s/termwall.jpg" % myIMGS
@@ -63,16 +64,30 @@ class Globals():
 	# Needed web urls
 	myFORUM_URL = "http://forum.xda-developers.com/showthread.php?t=1415661"
 	myDONATE = "http://forum.xda-developers.com/donatetome.php?u=2709018"
-	myCM_URL = "https://github.com/CyanogenMod"
-	myCM_RAW_URL = "https://raw.github.com/CyanogenMod"
-	myCM_JB_URL = "%s/android_vendor_cm/jellybean/vendorsetup.sh" % myCM_RAW_URL
-	myCM_ICS_URL = "%s/android_vendor_cm/ics/vendorsetup.sh" % myCM_RAW_URL
-	myCM_GB_URL = "%s/android_vendor_cyanogen/gingerbread/vendorsetup.sh" % myCM_RAW_URL
-	myINIT_URL = "https://github.com/CyanogenMod/android.git"
 	myREPO_TOOL_URL = "https://dl-ssl.google.com/dl/googlesource/git-repo/repo"
 	myGETCM = "http://get.cm"
 	myCMWIKI = "http://wiki.cyanogenmod.com"
 	myAOSP_SITE = "http://source.android.com"
+
+	# Device URLs
+	# Cyanogenmod
+	myCM_URL = "https://github.com/CyanogenMod"
+	myCM_RAW_URL = "https://raw.github.com/CyanogenMod"
+	myCM_INIT_URL = "https://github.com/CyanogenMod/android.git"
+	myCM_JB_URL = "%s/android_vendor_cm/jellybean/vendorsetup.sh" % myCM_RAW_URL
+	myCM_ICS_URL = "%s/android_vendor_cm/ics/vendorsetup.sh" % myCM_RAW_URL
+	myCM_GB_URL = "%s/android_vendor_cyanogen/gingerbread/vendorsetup.sh" % myCM_RAW_URL
+	# Codename Android
+	myCNA_URL = "https://github.com/CNA"
+	myCNA_RAW_URL = "https://raw.github.com/CNA"
+	myCNA_INIT_URL = "https://github.com/CNA/android_manifest.git"
+	myCNA_JB_URL = "%s/proprietary_vendor_cna/jellybean/vendorsetup.sh" % myCNA_RAW_URL
+	# Android Open Kang Project
+	myAOKP_URL = "https://github.com/AOKP"
+	myAOKP_RAW_URL = "https://raw.github.com/AOKP"
+	myAOKP_INIT_URL = "https://github.com/AOKP/platform_manifest.git"
+	myAOKP_ICS_URL = "%s/vendor_aokp/ics/vendorsetup.sh" % myAOKP_RAW_URL
+	myAOKP_JB_URL = "%s/vendor_aokp/jb/vendorsetup.sh" % myAOKP_RAW_URL
 
 	# Meh
 	myDEF_BRANCH = "ics"

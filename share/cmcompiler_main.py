@@ -238,12 +238,14 @@ def rom_combo_change(event):
 			Value2 = "Android Open Source Compiler"
 		Parser().write("rom_dist", value2)
 		Parser().write("rom_abrv", value)
-		Update().TEXT_COLOR()
+		Parser().write("branch", "Default")
+		Parser().write("device", "Default")
+		Update().TEXT()
 	romCombo.set_active(0)
 
 def device_button(event):
-	Update().DEVICES()
-	Update().TEXT_COLOR()
+	Utils().Devices()
+	Update().TEXT()
 
 def run_button(event):
 	isit = None
@@ -275,7 +277,7 @@ def choose_repo_path():
 	if r == gtk.RESPONSE_ACCEPT:
 		try:
 			Parser().write("repo_path", repo_dir)
-			Update().TEXT_COLOR()
+			Update().TEXT()
 		except NameError:
 			pass
 
@@ -339,7 +341,7 @@ class advanced():
  
 	# Main program
 	def main(self):
-		Globals.MAIN_WIN.set_title("Cyanogenmod Compiler")
+		Globals.MAIN_WIN.set_title(Globals.myMainTitle)
 		Globals.MAIN_WIN.set_position(gtk.WIN_POS_CENTER_ALWAYS)
 		Globals.MAIN_WIN.set_icon(myMAIN_ICON)
 		Globals.MAIN_WIN.connect("delete_event", self.main_quit)
@@ -547,7 +549,7 @@ class advanced():
 		tableB.attach(tableEntry, 1, 2, 0, 1, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
 		tableB.attach(linksFrame, 2, 3, 0, 1, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
 
-		Update().TEXT_COLOR()
+		Update().TEXT()
 
 		Globals.MAIN_WIN.add(MAIN_VBOX)
 		Globals.MAIN_WIN.show_all()

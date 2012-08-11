@@ -13,6 +13,7 @@
 import os
 import gtk
 from glob import glob
+import urllib
 import urllib2
 import commands
 
@@ -202,7 +203,7 @@ class Utils():
 
 		dialog.run()
 		dialog.destroy()
-		Update().TEXT_COLOR()
+		Update().TEXT()
 
 	def aboutRom(self, obj):
 		r = Parser().read("rom_dist")
@@ -246,6 +247,106 @@ class Utils():
 
 		dialog.run()
 		dialog.destroy()
+
+	def Devices(self):
+		def callback_device(widget, data=None):
+			Parser().write("device", data)
+
+		BR = Utils().getBranchUrl()
+		if BR == None:
+			return
+
+		dialog = gtk.Dialog("Choose device", None, gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT, (gtk.STOCK_CANCEL, gtk.RESPONSE_REJECT, gtk.STOCK_OK, gtk.RESPONSE_ACCEPT))
+		dialog.set_size_request(260, 400)
+		dialog.set_resizable(False)
+
+		scroll = gtk.ScrolledWindow()
+		scroll.set_border_width(10)
+		scroll.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_ALWAYS)
+		dialog.vbox.pack_start(scroll, True, True, 0)
+		scroll.show()
+
+		table = gtk.Table(2, 1, False)
+		table.set_row_spacings(5)
+
+		scroll.add_with_viewport(table)
+		table.show()
+
+		device = gtk.RadioButton(None, None)
+
+		try:
+			filehandle = urllib.urlopen(BR)
+		except IOError:
+			Utils().CDial(gtk.MESSAGE_ERROR, "Can't read file!", "Can't read the file to setup devices!\n\nPlease check you internet connections and try again!")
+
+		button_count = 0
+		for lines in filehandle.readlines():
+
+			if "combo" in lines and not "#" in lines:
+				button_count += 1
+				button = "button%s" % (button_count)
+
+				x = lines.split(" ")
+				radio = x[1]
+				x = radio.split("_")
+				radio = x[1]
+				x = radio.split("-")
+				radio = x[0]
+
+				button = gtk.RadioButton(group=device, label="%s" % (radio))
+				button.connect("toggled", callback_device, "%s" % (radio))
+				table.attach(button, 0, 1, button_count-1, button_count, xoptions=gtk.FILL, yoptions=gtk.SHRINK)
+				button.show()
+
+		filehandle.close()
+
+		dialog.run()
+		dialog.destroy()
+
+	def getBranchUrl(self):
+		BR = None
+		b = Parser().read("branch")
+		b = b.strip()
+		a = Parser().read("rom_abrv")
+		a = a.strip()
+		if b == "Default":
+			Utils().CDial(gtk.MESSAGE_ERROR, "No branch choosen", "Please select a branch so I know which device list to pull.\n\nThanks!")
+			return None
+
+		if a == "CM":
+			if b == "gingerbread":
+				BR = Globals.myCM_GB_URL
+			elif b == "ics":
+				BR = Globals.myCM_ICS_URL
+			elif b == "jellybean":
+				BR = Globals.myCM_JB_URL
+			else:
+				pass
+		elif a == "CNA":
+			if b == "jellybean":
+				BR = Globals.myCNA_JB_URL
+			else:
+				pass
+		elif a == "AOSP":
+			if b == "gingerbread":
+				BR = Globals.myCM_GB_URL
+			elif b == "ics":
+				BR = Globals.myCM_ICS_URL
+			elif b == "jellybean":
+				BR = Globals.myCM_JB_URL
+			else:
+				pass
+		elif a == "AOKP":
+			if b == "ics":
+				BR = Globals.myAOKP_ICS_URL
+			elif b == "jb":
+				BR = Globals.myAOKP_JB_URL
+			else:
+				pass
+		else:
+			pass
+
+		return BR
 
 	def CDial(self, dialog_type, title, message):
 		dialog = gtk.MessageDialog(None, gtk.DIALOG_MODAL, type=dialog_type, buttons=gtk.BUTTONS_OK)
