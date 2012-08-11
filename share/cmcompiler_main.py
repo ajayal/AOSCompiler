@@ -346,7 +346,7 @@ class advanced():
 		Globals.MAIN_WIN.connect("key_press_event", self.on_key_press)
 		Globals.MAIN_WIN.set_events(gtk.gdk.KEY_PRESS_MASK)
 		Globals.MAIN_WIN.set_events(gtk.gdk.CONTROL_MASK)
-		Globals.MAIN_WIN.set_size_request(1080, 638)
+		Globals.MAIN_WIN.set_size_request(1024, 638)
 		Globals.MAIN_WIN.set_resizable(False)
 
 		MAIN_VBOX = gtk.VBox(False, 0)
