@@ -207,7 +207,12 @@ class Utils():
 	def aboutRom(self, obj):
 		r = Parser().read("rom_dist")
 		a = Parser().read("rom_abrv")
-		dialog = gtk.Dialog("About: %s" % r, None, gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT, (gtk.STOCK_CANCEL, gtk.RESPONSE_REJECT, gtk.STOCK_OK, gtk.RESPONSE_ACCEPT))
+		if a == "AOSP":
+			ImageList = Globals.aospScreenyList
+		else:
+			ImageList = None
+			return
+		dialog = gtk.Dialog("About: %s" % r, None, gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT, (gtk.STOCK_OK, gtk.RESPONSE_ACCEPT))
 		dialog.set_resizable(False)
 
 		label = gtk.Label(a)
@@ -220,7 +225,7 @@ class Utils():
 		scroll = gtk.ScrolledWindow()
 		scroll.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_ALWAYS)
 		scroll.add_with_viewport(table)
-		scroll.set_size_request(330, 500)
+		scroll.set_size_request(700, 475)
 		scroll.show()
 		frame = gtk.Frame()
 		frame.add(scroll)
@@ -228,7 +233,7 @@ class Utils():
 		dialog.vbox.pack_start(frame, True, True, 0)
 
 		count = 0
-		for i in Globals.cmScreenyList:
+		for i in ImageList:
 			count+=1
 			image = gtk.Image()
 			image.show()

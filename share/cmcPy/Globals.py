@@ -32,14 +32,14 @@ class Globals():
 	myBASH = "/usr/share/cmcompiler/cmcBash"
 
 	# Remote Images per rom type
-	# Cyanogenmod Images
-	cmScreenyList = []
-	cmScreeny1 = "https://raw.github.com/lithid/Cmcompiler/master/extras/rom/cm/screeny.jpg"
-	cmScreeny2 = "https://raw.github.com/lithid/Cmcompiler/master/extras/rom/cm/screeny2.jpg"
-	cmScreeny3 = "https://raw.github.com/lithid/Cmcompiler/master/extras/rom/cm/screeny3.jpg"
-	cmScreenyList.append(cmScreeny1)
-	cmScreenyList.append(cmScreeny2)
-	cmScreenyList.append(cmScreeny3)
+	# Aosp
+	aospScreenyList = []
+	aospScreeny1 = "https://raw.github.com/lithid/Cmcompiler/master/extras/rom/aosp/screeny1.jpg"
+	aospScreeny2 = "https://raw.github.com/lithid/Cmcompiler/master/extras/rom/aosp/screeny2.jpg"
+	aospScreeny3 = "https://raw.github.com/lithid/Cmcompiler/master/extras/rom/aosp/screeny3.jpg"
+	aospScreenyList.append(aospScreeny1)
+	aospScreenyList.append(aospScreeny2)
+	aospScreenyList.append(aospScreeny3)
 
 	# VTE Commands
 	mySYNC_SCRIPT = "%s/sync_script.sh" % myBASH
