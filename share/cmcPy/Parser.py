@@ -33,6 +33,8 @@ class Parser():
 		try:
 			config = ConfigParser.RawConfigParser()
 			config.read(Globals.myCONF)
+			getRomDist = config.get(title, 'rom_dist')
+			getRomAbrv = config.get(title, 'rom_abrv')
 			getDevice = config.get(title, 'device')
 			getBranch = config.get(title, 'branch')
 			getRepoPath = config.get(title, 'repo_path')
@@ -41,6 +43,8 @@ class Parser():
 			getManuf = config.get(title, 'manuf')
 
 		except ConfigParser.NoSectionError:
+			getRomDist = None
+			getRomAbrv = None
 			getDevice = None
 			getBranch = None
 			getRepoPath = None
@@ -50,6 +54,20 @@ class Parser():
 
 		config = ConfigParser.RawConfigParser()
 		config.add_section(title)
+
+		if arg == "rom_dist":
+			config.set(title, 'rom_dist', value)
+		elif getRomDist:
+			config.set(title, 'rom_dist', getRomDist)
+		else:
+			config.set(title, 'rom_dist', default)
+
+		if arg == "rom_abrv":
+			config.set(title, 'rom_abrv', value)
+		elif getRomAbrv:
+			config.set(title, 'rom_abrv', getRomAbrv)
+		else:
+			config.set(title, 'rom_abrv', default)
 
 		if arg == "device":
 			config.set(title, 'device', value)

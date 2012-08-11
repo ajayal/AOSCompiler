@@ -100,12 +100,8 @@ for i in ["Options", "Start adb", "View config", "Repo path", "Remove config", "
 	toolsCombo.append_text("%s" % i)
 
 romCombo = gtk.combo_box_new_text()
-for i in ["Aosp", "Cyanogenmod", "Aokp", "Codename Android"]:
+for i in ["Choose", "AOSP", "CM", "AOKP", "CNA"]:
 	romCombo.append_text("%s" % i)
-
-branchCombo = gtk.combo_box_new_text()
-for i in ["gingerbread", "ics", "jellybean"]:
-	branchCombo.append_text("%s" % i)
 
 makeCombo = gtk.combo_box_new_text()
 for i in range(1,Globals.numprocs+1):
@@ -194,15 +190,6 @@ def run_custom_device():
 		Utils().CDial(gtk.MESSAGE_INFO, "Skipping this", "No changes have been made!")
 	dialog.destroy()
 
-def get_branch_combo():
-	r = Parser().read("branch")
-	if r == "gingerbread":
-		return 0
-	elif r == "ics":
-		return 1
-	elif r == "jellybean":
-		return 2
-
 def tools_combo_change(event):
 	value = int(toolsCombo.get_active())
 	if value == 1:
@@ -236,13 +223,23 @@ def sync_combo_change(event):
 
 def rom_combo_change(event):
 	value = str(romCombo.get_active_text())
-	print value
-
-def branch_combo_change(event):
-	value = str(branchCombo.get_active_text())
-	Parser().write("branch", value)
-	Parser().write("device", "None")
-	Update().TEXT_COLOR()
+	if value == "Choose":
+		pass
+	else:
+		if value == "AOSP":
+			value2 = "Android Open Source Project"
+		elif value == "AOKP":
+			value2 = "Android Open Kang Project"
+		elif value == "CM":
+			value2 = "CyanogenMod"
+		elif value == "CNA":
+			value2 = "Codename Android"
+		else:
+			Value2 = "Android Open Source Compiler"
+		Parser().write("rom_dist", value2)
+		Parser().write("rom_abrv", value)
+		Update().TEXT_COLOR()
+	romCombo.set_active(0)
 
 def device_button(event):
 	Update().DEVICES()
@@ -364,29 +361,36 @@ class advanced():
 
 		Globals.MAIN_INFO.show()
 		Globals.KEY_BIND_INFO.show()
+		Globals.aoscTitleLab.show()
 
 		# Build options
 		toolsCombo.show()
 		toolsCombo.set_wrap_width(2)
 		toolsCombo.set_active(0)
-		#toolsCombo.set_size_request(90, 28)
 		toolsCombo.connect("changed", tools_combo_change)
 
 		Globals.toolsLab.show()
 
 		romCombo.show()
-		#romCombo.set_wrap_width(2)
+		romCombo.set_wrap_width(2)
 		romCombo.set_active(0)
-		#romCombo.set_size_request(90, 28)
 		romCombo.connect("changed", rom_combo_change)
 
 		Globals.romLab.show()
 
-		branchCombo.show()
-		i = get_branch_combo()
-		branchCombo.set_active(i)
-		branchCombo.set_wrap_width(4)
-		branchCombo.connect("changed", branch_combo_change)
+		aboutRomImg = gtk.Image()
+		aboutRomImg.set_from_file(Globals.ClobImg)
+		Globals.aboutRomBtn.set_image(aboutRomImg)
+		Globals.aboutRomBtn.connect("clicked", Utils().aboutRom)
+		Globals.aboutRomBtn.show()
+
+		Globals.aboutRomLab.show()
+
+		branchImg = gtk.Image()
+		branchImg.set_from_file(Globals.ClobImg)
+		Globals.branchBtn.set_image(branchImg)
+		Globals.branchBtn.connect("clicked", Utils().choose_branch)
+		Globals.branchBtn.show()
 
 		Globals.branchLab.show()
 
@@ -416,22 +420,24 @@ class advanced():
 		optTable.show()
 		optTable.attach(romCombo, 0, 1, 0, 1, xpadding=15, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
 		optTable.attach(Globals.romLab, 0, 1, 1, 2, xpadding=15, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
-		optTable.attach(branchCombo, 1, 2, 0, 1, xpadding=15, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
-		optTable.attach(Globals.branchLab, 1, 2, 1, 2, xpadding=15, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
-		optTable.attach(Globals.DEV_BTN, 2, 3, 0, 1, xpadding=15, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
-		optTable.attach(Globals.deviceLab, 2, 3, 1, 2, xpadding=15, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
-		optTable.attach(syncCombo, 3, 4, 0, 1, xpadding=15, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
-		optTable.attach(Globals.syncjobsLab, 3, 4, 1, 2, xpadding=15, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
-		optTable.attach(makeCombo, 4, 5, 0, 1, xpadding=15, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
-		optTable.attach(Globals.makeLab, 4, 5, 1, 2, xpadding=15, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
-		optTable.attach(toolsCombo, 5, 6, 0, 1, xpadding=15, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
-		optTable.attach(Globals.toolsLab, 5, 6, 1, 2, xpadding=15, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
+		optTable.attach(Globals.aboutRomBtn, 1, 2, 0, 1, xpadding=15, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
+		optTable.attach(Globals.aboutRomLab, 1, 2, 1, 2, xpadding=15, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
+		optTable.attach(Globals.branchBtn, 2, 3, 0, 1, xpadding=15, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
+		optTable.attach(Globals.branchLab, 2, 3, 1, 2, xpadding=15, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
+		optTable.attach(Globals.DEV_BTN, 3, 4, 0, 1, xpadding=15, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
+		optTable.attach(Globals.deviceLab, 3, 4, 1, 2, xpadding=15, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
+		optTable.attach(syncCombo, 4, 5, 0, 1, xpadding=15, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
+		optTable.attach(Globals.syncjobsLab, 4, 5, 1, 2, xpadding=15, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
+		optTable.attach(makeCombo, 5, 6, 0, 1, xpadding=15, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
+		optTable.attach(Globals.makeLab, 5, 6, 1, 2, xpadding=15, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
+		optTable.attach(toolsCombo, 6, 7, 0, 1, xpadding=15, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
+		optTable.attach(Globals.toolsLab, 6, 7, 1, 2, xpadding=15, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
 		optTable.set_border_width(5)
 		optFrame = gtk.Frame()
 		optFrame.add(optTable)
 		Globals.buildFrameLab.show()
 		optFrame.set_label_widget(Globals.buildFrameLab)
-		optFrame.set_border_width(15)
+		optFrame.set_border_width(5)
 		optFrame.show()
 
 		# Build Frame
@@ -473,7 +479,7 @@ class advanced():
 		buildFrame.add(buildTable)
 		Globals.runFrameLab.show()
 		buildFrame.set_label_widget(Globals.runFrameLab)
-		buildFrame.set_border_width(5)
+		#buildFrame.set_border_width(5)
 		buildFrame.show()
 
 		# Entrybox stuff
@@ -528,13 +534,14 @@ class advanced():
 		tableB = gtk.Table(1, 2, False)
 		tableB.show()
 
+		MAIN_VBOX.pack_start(Globals.aoscTitleLab, False, False, 0)
 		MAIN_VBOX.pack_start(Globals.MAIN_INFO, False, False, 0)
-		MAIN_VBOX.pack_start(Globals.KEY_BIND_INFO, False, False, 0)
 		MAIN_VBOX.pack_start(table, True, True, 0)
+		MAIN_VBOX.pack_start(Globals.KEY_BIND_INFO, False, False, 0)
 		MAIN_VBOX.pack_start(optFrame, True, True, 0)
 		MAIN_VBOX.pack_start(tableB, True, True, 0)
 
-		table.attach(TERM_FRAME, 0, 1, 0, 1, xpadding=10, ypadding=10)
+		table.attach(TERM_FRAME, 0, 1, 0, 1, xpadding=10)
 
 		tableB.attach(buildFrame, 0, 1, 0, 1, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
 		tableB.attach(tableEntry, 1, 2, 0, 1, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)

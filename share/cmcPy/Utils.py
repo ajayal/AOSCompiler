@@ -17,6 +17,7 @@ import commands
 
 from Globals import Globals
 from Parser import Parser
+from Update import Update
 
 class Utils():
 	def is_adb_running(self):
@@ -152,6 +153,71 @@ class Utils():
 
 		return None
 
+	def choose_branch(self, obj):
+		rom = Parser().read("rom_abrv")
+		if rom == "CM":
+			branchList = list(["gingerbread", "ics", "jellybean"])
+		elif rom == "AOKP":
+			branchList = list(["ics", "jb"])
+		elif rom == "AOSP":
+			branchList = list(["gingerbread", "gingerbread-release", "ics-mr1", "ics-plus-aosp", "jb-dev", "android-4.1.1_r4", "master"])
+		elif rom == "CNA":
+			branchList = list(["jellybean"])
+		else:
+			branchList = list(["None"])
+
+		def callback_branch(widget, data=None):
+			print "%s was toggled %s" % (data, ("OFF", "ON")[widget.get_active()])
+			Parser().write("branch", data)
+
+		dialog = gtk.Dialog("Choose branch", None, gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT, (gtk.STOCK_CANCEL, gtk.RESPONSE_REJECT, gtk.STOCK_OK, gtk.RESPONSE_ACCEPT))
+		dialog.set_size_request(260, 200)
+		dialog.set_resizable(False)
+
+		scroll = gtk.ScrolledWindow()
+		scroll.set_border_width(10)
+		scroll.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_ALWAYS)
+		dialog.vbox.pack_start(scroll, True, True, 0)
+		scroll.show()
+
+		table = gtk.Table(2, 1, False)
+		table.set_row_spacings(45)
+
+		scroll.add_with_viewport(table)
+		table.show()
+
+		device = gtk.RadioButton(None, None)
+
+		button_count = 0
+		for radio in branchList:
+
+			button_count += 1
+			button = "button%s" % (button_count)
+
+			button = gtk.RadioButton(group=device, label="%s" % (radio))
+			button.connect("toggled", callback_branch, "%s" % (radio))
+			table.attach(button, 0, 1, 0, button_count, xoptions=gtk.FILL, yoptions=gtk.SHRINK)
+			button.show()
+
+		dialog.run()
+		dialog.destroy()
+		Update().TEXT_COLOR()
+
+	def aboutRom(self, obj):
+		r = Parser().read("rom_dist")
+		a = Parser().read("rom_abrv")
+		dialog = gtk.Dialog("About: %s" % r, None, gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT, (gtk.STOCK_CANCEL, gtk.RESPONSE_REJECT, gtk.STOCK_OK, gtk.RESPONSE_ACCEPT))
+		dialog.set_size_request(400, 200)
+		dialog.set_resizable(False)
+
+		label = gtk.Label(a)
+		label.show()
+
+		dialog.vbox.pack_start(label, True, True, 0)
+
+		dialog.run()
+		dialog.destroy()
+
 	def CDial(self, dialog_type, title, message):
 		dialog = gtk.MessageDialog(None, gtk.DIALOG_MODAL, type=dialog_type, buttons=gtk.BUTTONS_OK)
 		dialog.set_markup(title)
@@ -171,3 +237,4 @@ class Utils():
 			return True
 		else:
 			return False
+
