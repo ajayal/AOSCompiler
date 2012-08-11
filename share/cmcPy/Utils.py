@@ -13,6 +13,7 @@
 import os
 import gtk
 from glob import glob
+import urllib2
 import commands
 
 from Globals import Globals
@@ -207,13 +208,36 @@ class Utils():
 		r = Parser().read("rom_dist")
 		a = Parser().read("rom_abrv")
 		dialog = gtk.Dialog("About: %s" % r, None, gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT, (gtk.STOCK_CANCEL, gtk.RESPONSE_REJECT, gtk.STOCK_OK, gtk.RESPONSE_ACCEPT))
-		dialog.set_size_request(400, 200)
 		dialog.set_resizable(False)
 
 		label = gtk.Label(a)
 		label.show()
-
 		dialog.vbox.pack_start(label, True, True, 0)
+
+		table = gtk.Table(2, 1, False)
+		table.show()
+
+		scroll = gtk.ScrolledWindow()
+		scroll.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_ALWAYS)
+		scroll.add_with_viewport(table)
+		scroll.set_size_request(330, 500)
+		scroll.show()
+		frame = gtk.Frame()
+		frame.add(scroll)
+		frame.show()
+		dialog.vbox.pack_start(frame, True, True, 0)
+
+		count = 0
+		for i in Globals.cmScreenyList:
+			count+=1
+			image = gtk.Image()
+			image.show()
+			imgurl = urllib2.urlopen(i)
+			loader = gtk.gdk.PixbufLoader()
+			loader.write(imgurl.read())
+			loader.close()
+			image.set_from_pixbuf(loader.get_pixbuf())
+			table.attach(image, count-1, count, 0, 1, xpadding=20, ypadding=10)
 
 		dialog.run()
 		dialog.destroy()

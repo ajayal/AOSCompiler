@@ -31,6 +31,16 @@ class Globals():
 	ClobImg = "%s/clobber.png" % myIMGS
 	myBASH = "/usr/share/cmcompiler/cmcBash"
 
+	# Remote Images per rom type
+	# Cyanogenmod Images
+	cmScreenyList = []
+	cmScreeny1 = "https://raw.github.com/lithid/Cmcompiler/master/extras/rom/cm/screeny.jpg"
+	cmScreeny2 = "https://raw.github.com/lithid/Cmcompiler/master/extras/rom/cm/screeny2.jpg"
+	cmScreeny3 = "https://raw.github.com/lithid/Cmcompiler/master/extras/rom/cm/screeny3.jpg"
+	cmScreenyList.append(cmScreeny1)
+	cmScreenyList.append(cmScreeny2)
+	cmScreenyList.append(cmScreeny3)
+
 	# VTE Commands
 	mySYNC_SCRIPT = "%s/sync_script.sh" % myBASH
 	myCOMPILE_SCRIPT = "%s/compile_script.sh" % myBASH
