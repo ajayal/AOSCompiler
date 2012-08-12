@@ -97,19 +97,19 @@ myMAIN_ICON = gtk.gdk.pixbuf_new_from_file(Globals.myICON)
 
 toolsCombo = gtk.combo_box_new_text()
 for i in ["Options", "Start adb", "View config", "Repo path", "Remove config", "Run bash", "Add device", "Stop/reset", "Open rom folder"]:
-	toolsCombo.append_text("%s" % i)
+	toolsCombo.append_text(i)
 
 romCombo = gtk.combo_box_new_text()
 for i in ["Choose", "AOSP", "CM", "AOKP", "CNA"]:
-	romCombo.append_text("%s" % i)
+	romCombo.append_text(i)
 
 makeCombo = gtk.combo_box_new_text()
 for i in range(1,Globals.numprocs+1):
-	makeCombo.append_text("%s" % i)
+	makeCombo.append_text(str(i))
 
 syncCombo = gtk.combo_box_new_text()
 for i in range(1,17):
-	syncCombo.append_text("%s" % i)
+	syncCombo.append_text(str(i))
 
 entryBox = gtk.Entry()
 

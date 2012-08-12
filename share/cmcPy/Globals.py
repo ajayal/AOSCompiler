@@ -32,7 +32,9 @@ class Globals():
 	ClobImg = "%s/clobber.png" % myIMGS
 	myBASH = "/usr/share/cmcompiler/cmcBash"
 
+	#####
 	# Remote Images per rom type
+	#####
 	# Aosp
 	aospScreenyList = []
 	aospScreeny1 = "https://raw.github.com/lithid/Cmcompiler/master/extras/rom/aosp/screeny1.jpg"
@@ -69,7 +71,9 @@ class Globals():
 	myCMWIKI = "http://wiki.cyanogenmod.com"
 	myAOSP_SITE = "http://source.android.com"
 
+	#####
 	# Device URLs
+	#####
 	# Cyanogenmod
 	myCM_URL = "https://github.com/CyanogenMod"
 	myCM_RAW_URL = "https://raw.github.com/CyanogenMod"
@@ -88,6 +92,12 @@ class Globals():
 	myAOKP_INIT_URL = "https://github.com/AOKP/platform_manifest.git"
 	myAOKP_ICS_URL = "%s/vendor_aokp/ics/vendorsetup.sh" % myAOKP_RAW_URL
 	myAOKP_JB_URL = "%s/vendor_aokp/jb/vendorsetup.sh" % myAOKP_RAW_URL
+	# Android Open Source Project
+	myAOSP_INIT_URL = "https://android.googlesource.com/platform/manifest"
+	myRAW_URL = "https://raw.github.com/lithid"
+	myAOSP_JB_URL = "%s/Cmcompiler/master/extras/rom/aosp/DeviceList-GB" % myRAW_URL
+	myAOSP_ICS_URL = "%s/Cmcompiler/master/extras/rom/aosp/DeviceList-ICS" % myRAW_URL
+	myAOSP_GB_URL = "%s/Cmcompiler/master/extras/rom/aosp/DeviceList-JB" % myRAW_URL
 
 	# Meh
 	myDEF_BRANCH = "ics"

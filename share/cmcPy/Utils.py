@@ -15,6 +15,7 @@ import gtk
 from glob import glob
 import urllib
 import urllib2
+import re
 import commands
 
 from Globals import Globals
@@ -156,17 +157,22 @@ class Utils():
 		return None
 
 	def choose_branch(self, obj):
+		branchList = []
 		rom = Parser().read("rom_abrv")
 		if rom == "CM":
-			branchList = list(["gingerbread", "ics", "jellybean"])
+			for x in ["gingerbread", "ics", "jellybean"]:
+				branchList.append(x)
 		elif rom == "AOKP":
-			branchList = list(["ics", "jb"])
+			for x in ["ics", "jb"]:
+				branchList.append(x)
 		elif rom == "AOSP":
-			branchList = list(["gingerbread", "gingerbread-release", "ics-mr1", "ics-plus-aosp", "jb-dev", "android-4.1.1_r4", "master"])
+			for x in ["gingerbread", "gingerbread-release", "ics-mr1", "ics-plus-aosp", "jb-dev", "android-4.1.1_r4", "master"]:
+				branchList.append(x)
 		elif rom == "CNA":
-			branchList = list(["jellybean"])
+			for x in ["jellybean"]:
+				branchList.append(x)
 		else:
-			branchList = list(["None"])
+			return
 
 		def callback_branch(widget, data=None):
 			print "%s was toggled %s" % (data, ("OFF", "ON")[widget.get_active()])
@@ -183,7 +189,7 @@ class Utils():
 		scroll.show()
 
 		table = gtk.Table(2, 1, False)
-		table.set_row_spacings(45)
+		table.set_row_spacings(0)
 
 		scroll.add_with_viewport(table)
 		table.show()
@@ -194,11 +200,9 @@ class Utils():
 		for radio in branchList:
 
 			button_count += 1
-			button = "button%s" % (button_count)
-
 			button = gtk.RadioButton(group=device, label="%s" % (radio))
-			button.connect("toggled", callback_branch, "%s" % (radio))
-			table.attach(button, 0, 1, 0, button_count, xoptions=gtk.FILL, yoptions=gtk.SHRINK)
+			button.connect("toggled", callback_branch, radio)
+			table.attach(button, 0, 1, button_count-1, button_count, xoptions=gtk.FILL, yoptions=gtk.FILL)
 			button.show()
 
 		dialog.run()
@@ -252,9 +256,13 @@ class Utils():
 		def callback_device(widget, data=None):
 			Parser().write("device", data)
 
-		BR = Utils().getBranchUrl()
+		BR = Utils().getBranchUrl("raw")
 		if BR == None:
-			return
+			a = Parser().read("rom_abrv")
+			if a == "AOSP":
+				BR = ["crespo", "tuna", "maguro", "stingray", "maguro"]
+			else:
+				return
 
 		a = Parser().read("rom_abrv")
 		dialog = gtk.Dialog("Choose device for %s" % a, None, gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT, (gtk.STOCK_CANCEL, gtk.RESPONSE_REJECT, gtk.STOCK_OK, gtk.RESPONSE_ACCEPT))
@@ -304,7 +312,7 @@ class Utils():
 		dialog.run()
 		dialog.destroy()
 
-	def getBranchUrl(self):
+	def getBranchUrl(self, arg):
 		BR = None
 		b = Parser().read("branch")
 		b = b.strip()
@@ -315,35 +323,47 @@ class Utils():
 			return None
 
 		if a == "CM":
-			if b == "gingerbread":
-				BR = Globals.myCM_GB_URL
-			elif b == "ics":
-				BR = Globals.myCM_ICS_URL
-			elif b == "jellybean":
-				BR = Globals.myCM_JB_URL
+			if arg == "init":
+				BR = Globals.myCM_INIT_URL
 			else:
-				pass
+				if b == "gingerbread":
+					BR = Globals.myCM_GB_URL
+				elif b == "ics":
+					BR = Globals.myCM_ICS_URL
+				elif b == "jellybean":
+					BR = Globals.myCM_JB_URL
+				else:
+					pass
 		elif a == "CNA":
-			if b == "jellybean":
-				BR = Globals.myCNA_JB_URL
+			if arg == "init":
+				BR = Globals.myCNA_INIT_URL
 			else:
-				pass
+				if b == "jellybean":
+					BR = Globals.myCNA_JB_URL
+				else:
+					pass
 		elif a == "AOSP":
-			if b == "gingerbread":
-				BR = Globals.myCM_GB_URL
-			elif b == "ics":
-				BR = Globals.myCM_ICS_URL
-			elif b == "jellybean":
-				BR = Globals.myCM_JB_URL
+			if arg == "init":
+				BR = Globals.myAOSP_INIT_URL
 			else:
-				pass
+				if b == "gingerbread":
+					BR = Globals.myCM_GB_URL
+				elif b == "ics":
+					BR = Globals.myCM_ICS_URL
+				elif b == "jellybean":
+					BR = Globals.myCM_JB_URL
+				else:
+					pass
 		elif a == "AOKP":
-			if b == "ics":
-				BR = Globals.myAOKP_ICS_URL
-			elif b == "jb":
-				BR = Globals.myAOKP_JB_URL
+			if arg == "init":
+				BR = Globals.myAOKP_INIT_URL
 			else:
-				pass
+				if b == "ics":
+					BR = Globals.myAOKP_ICS_URL
+				elif b == "jb":
+					BR = Globals.myAOKP_JB_URL
+				else:
+					pass
 		else:
 			pass
 
