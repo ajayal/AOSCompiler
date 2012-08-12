@@ -72,7 +72,9 @@ class Utils():
 					label = gtk.Label()
 					label.set_markup("<b>%s:</b> <small>%s</small>" % (x, y))
 					label.show()
-					table.attach(label, 0, 1, count-1, count, xpadding=10, ypadding=10)
+					label.set_alignment(xalign=0, yalign=0)
+					label.set_padding(5, 5)
+					table.attach(label, 0, 1, count-1, count)
 		except IOError:
 			Globals().CDial(gtk.MESSAGE_ERROR, "Failed reading configuration", "Can't currently read the config file.\n\nIs it open somewhere else?\n\nPlease try again.")
 
