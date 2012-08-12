@@ -166,7 +166,7 @@ class Utils():
 			for x in ["ics", "jb"]:
 				branchList.append(x)
 		elif rom == "AOSP":
-			for x in ["gingerbread", "gingerbread-release", "ics-mr1", "ics-plus-aosp", "jb-dev", "android-4.1.1_r4", "master"]:
+			for x in ["gingerbread", "gingerbread-release", "ics-mr1", "jb-dev", "android-4.1.1_r4", "master"]:
 				branchList.append(x)
 		elif rom == "CNA":
 			for x in ["jellybean"]:
@@ -258,11 +258,7 @@ class Utils():
 
 		BR = Utils().getBranchUrl("raw")
 		if BR == None:
-			a = Parser().read("rom_abrv")
-			if a == "AOSP":
-				BR = ["crespo", "tuna", "maguro", "stingray", "maguro"]
-			else:
-				return
+			return
 
 		a = Parser().read("rom_abrv")
 		dialog = gtk.Dialog("Choose device for %s" % a, None, gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT, (gtk.STOCK_CANCEL, gtk.RESPONSE_REJECT, gtk.STOCK_OK, gtk.RESPONSE_ACCEPT))
@@ -343,15 +339,16 @@ class Utils():
 				else:
 					pass
 		elif a == "AOSP":
+			print b
 			if arg == "init":
 				BR = Globals.myAOSP_INIT_URL
 			else:
-				if b == "gingerbread":
-					BR = Globals.myCM_GB_URL
-				elif b == "ics":
-					BR = Globals.myCM_ICS_URL
-				elif b == "jellybean":
-					BR = Globals.myCM_JB_URL
+				if b == "gingerbread" or b == "gingerbread-release":
+					BR = Globals.myAOSP_GB_URL
+				elif b == "ics-mr1":
+					BR = Globals.myAOSP_ICS_URL
+				elif b == "android-4.1.1_r4" or b == "jb-dev":
+					BR = Globals.myAOSP_JB_URL
 				else:
 					pass
 		elif a == "AOKP":

@@ -95,9 +95,9 @@ class Globals():
 	# Android Open Source Project
 	myAOSP_INIT_URL = "https://android.googlesource.com/platform/manifest"
 	myRAW_URL = "https://raw.github.com/lithid"
-	myAOSP_JB_URL = "%s/Cmcompiler/master/extras/rom/aosp/DeviceList-GB" % myRAW_URL
+	myAOSP_JB_URL = "%s/Cmcompiler/master/extras/rom/aosp/DeviceList-JB" % myRAW_URL
 	myAOSP_ICS_URL = "%s/Cmcompiler/master/extras/rom/aosp/DeviceList-ICS" % myRAW_URL
-	myAOSP_GB_URL = "%s/Cmcompiler/master/extras/rom/aosp/DeviceList-JB" % myRAW_URL
+	myAOSP_GB_URL = "%s/Cmcompiler/master/extras/rom/aosp/DeviceList-GB" % myRAW_URL
 
 	# Meh
 	myDEF_BRANCH = "ics"
