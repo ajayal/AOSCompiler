@@ -11,16 +11,36 @@
 ######################################################################
 
 import os
+import sys
 import gtk
 from glob import glob
 import urllib
 import urllib2
+import platform
 import re
 import commands
 
 from Globals import Globals
 from Parser import Parser
 from Update import Update
+
+def chkInstalled(arg):
+
+	p = False
+
+	cmd = "dpkg --get-selections " + arg
+	p = commands.getoutput(cmd)
+	try:
+		p = p.split("\t")
+		p = p[-1]
+		if p == "install":
+			p = True
+		else:
+			p = False
+	except:
+		p = False
+
+	return p
 
 class Utils():
 	def is_adb_running(self):
@@ -367,6 +387,70 @@ class Utils():
 			pass
 
 		return BR
+
+	def InstallPackages(self):
+
+		L = []
+		pcount = 0
+
+		# ('Ubuntu', '12.04', 'precise')
+		plat_list = platform.dist()
+		plat_d = plat_list[0]
+		plat_v = plat_list[1]
+		plat_n = plat_list[2]
+
+		if plat_d == "Ubuntu":
+			pcount += 1
+			if plat_v == "12.10":
+				pak = "libwxgtk2.8-dev"
+			else:
+				pak = "libwxgtk2.6-dev"
+			P = ["git-core", "gnupg", "flex", "bison", "gperf", "libsdl1.2-dev", "libesd0-dev", "squashfs-tools", "build-essential", "zip", "curl", "libncurses5-dev", "zlib1g-dev", "openjdk-6-jdk", "pngcrush", "schedtool", pak]
+			for x in P:
+				i = chkInstalled(x)
+				if i == False:
+					L.extend([x])
+		else:
+			Utils().CDial(gtk.MESSAGE_WARNING, "Linux Distro", "Sorry, we couldn't detect your linux distro. File a bug report with this info:\n\n<b>Distro: </b>%s\n<b>Version: </b>%s\n<b>Name: </b>%s\n" % (plat_d, plat_v, plat_n))
+
+		check = (sys.maxsize > 2**32)
+		if check is True:
+			if plat_d == "Ubuntu":
+				if plat_v == "10.04":
+					P = ["g++-multilib" "lib32z1-dev", "lib32ncurses5-dev", "lib32readline5-dev", "gcc-4.3-multilib", "g++-4.3-multilib"]
+					for x in P:
+						i = chkInstalled(x)
+						if i == False:
+							L.extend([x])
+				elif plat_v == "11.04":
+					P = ["g++-multilib" "lib32z1-dev", "lib32ncurses5-dev", "lib32readline-gplv2-dev", "gcc-4.3-multilib", "g++-4.3-multilib"]
+					for x in P:
+						i = chkInstalled(x)
+						if i == False:
+							L.extend([x])
+				elif plat_v == "12.10" or plat_v == "12.04" or plat_v == "11.10":
+					P = ["g++-multilib", "lib32z1-dev", "lib32ncurses5-dev", "lib32readline-gplv2-dev"]
+					for x in P:
+						i = chkInstalled(x)
+						if i == False:
+							L.extend([x])
+				else:
+					print "Nothing to extend, version not matched"
+
+		if not L and pcount == 0:
+			Utils().CDial(gtk.MESSAGE_INFO, "Empty package list", "After looking at your packages the list is empty, maybe an unsupported distro or filesystem error. Either way I am not able to help without some information. You will not be able to use most features until you install the needed packages, be warned.\n\n Thanks.")
+		elif not L and pcount == 1:
+			Utils().CDial(gtk.MESSAGE_INFO, "Empty package list", "Something happened")
+		else:
+			packages = ",".join(L).replace(",", " ")
+			q = Utils().QDial("Are you sure??", "We are going to install this list of packages\n\n%s\n\n Are you sure we should proceed?" % packages)
+			if q == True:
+				Globals.TERM.set_background_saturation(0.3)
+				Globals.TERM.fork_command("bash")
+				Globals.TERM.feed_child("clear\n")
+				Globals.TERM.feed_child("gksudo \"apt-get install -y %s\"\n" % packages)
+			else:
+				return
 
 	def CDial(self, dialog_type, title, message):
 		dialog = gtk.MessageDialog(None, gtk.DIALOG_MODAL, type=dialog_type, buttons=gtk.BUTTONS_OK)

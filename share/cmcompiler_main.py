@@ -96,7 +96,7 @@ def compile_button_clicked(obj):
 myMAIN_ICON = gtk.gdk.pixbuf_new_from_file(Globals.myICON)
 
 toolsCombo = gtk.combo_box_new_text()
-for i in ["Options", "Start adb", "View config", "Repo path", "Remove config", "Run bash", "Add device", "Stop/reset", "Open rom folder"]:
+for i in ["Options", "Start adb", "View config", "Repo path", "Remove config", "Run bash", "Add device", "Stop/reset", "Open rom folder", "Install packages"]:
 	toolsCombo.append_text(i)
 
 romCombo = gtk.combo_box_new_text()
@@ -208,6 +208,8 @@ def tools_combo_change(event):
 		main_cmc_cmd()
 	elif value == 8:
 		openBuildFolder()
+	elif value == 9:
+		Utils().InstallPackages()
 	else:
 		pass
 
