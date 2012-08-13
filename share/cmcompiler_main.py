@@ -29,6 +29,7 @@ from cmcPy.Globals import Globals
 from cmcPy.Parser import Parser
 from cmcPy.Update import Update
 from cmcPy.Utils import Utils
+from cmcPy.InstallPackages import InstallPackages
 
 ######################################################################
 # Helper functions
@@ -209,7 +210,7 @@ def tools_combo_change(event):
 	elif value == 8:
 		openBuildFolder()
 	elif value == 9:
-		Utils().InstallPackages()
+		InstallPackages().runInstall()
 	else:
 		pass
 
