@@ -51,6 +51,15 @@ def getLinux(arg):
 		return None 
 
 class InstallPackages():
+	def repo(self):
+		Globals.TERM.set_background_saturation(0.3)
+		Globals.TERM.fork_command("bash")
+		Globals.TERM.feed_child("clear\n")
+		Globals.TERM.feed_child("curl https://dl-ssl.google.com/dl/googlesource/git-repo/repo > repo\n")
+		Globals.TERM.feed_child("chmod a+x repo\n")
+		Globals.TERM.feed_child("gksudo mv repo /usr/local/bin/repo\n")
+		
+
 	def Ubuntu(self, version):
 
 		L = []

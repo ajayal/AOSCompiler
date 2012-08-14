@@ -29,6 +29,7 @@ from cmcPy.Globals import Globals
 from cmcPy.Parser import Parser
 from cmcPy.Update import Update
 from cmcPy.Utils import Utils
+from cmcPy.Compile import Compile
 from cmcPy.InstallPackages import InstallPackages
 
 ######################################################################
@@ -97,7 +98,7 @@ def compile_button_clicked(obj):
 myMAIN_ICON = gtk.gdk.pixbuf_new_from_file(Globals.myICON)
 
 toolsCombo = gtk.combo_box_new_text()
-for i in ["Options", "Start adb", "View config", "Repo path", "Remove config", "Run bash", "Add device", "Stop/reset", "Open rom folder", "Install packages"]:
+for i in ["Options", "Start adb", "View config", "Repo path", "Remove config", "Run bash", "Add device", "Stop/reset", "Open rom folder", "Install packages", "Install repo"]:
 	toolsCombo.append_text(i)
 
 romCombo = gtk.combo_box_new_text()
@@ -211,6 +212,8 @@ def tools_combo_change(event):
 		openBuildFolder()
 	elif value == 9:
 		InstallPackages().runInstall()
+	elif value == 10:
+		InstallPackages().repo()
 	else:
 		pass
 
@@ -269,7 +272,7 @@ def run_button(event):
 
 	if Globals.checkCompile.get_active() == True:
 		isit = True
-		Utils().Compile()
+		Compile().run()
 
 	if isit == None:
 		main_cmc_cmd()
@@ -300,15 +303,31 @@ def view_config():
 	Utils().ViewConfig()
 
 def main_cmc_cmd():
-	Globals.TERM.set_background_saturation(1.0)
-	Globals.TERM.fork_command('clear')
+	Utils().ResetTerm()
 
 def compile_or_sync(arg):
 	if arg == "Syncing":
+		repo = Utils().which("repo")
+		if repo == None:
+			Utils().CDial(gtk.MESSAGE_INFO, "Repo is not installed", "You need to install repo to continue.")
+			main_cmc_cmd()
+			return
+		r = Parser().read("repo_path")
+		url = Utils().getBranchUrl("init")
+		b = Parser().read("branch")
+		j = Parser().read("sync_jobs")
+		if not os.path.exists(r):
+			os.mkdir(r)
+		os.chdir(r)
 		Globals.TERM.set_background_saturation(0.3)
-		Globals.TERM.fork_command(Globals.mySYNC_SCRIPT)
+		Globals.TERM.fork_command('bash')
+		if not os.path.exists("%s/.repo" % r):
+			Utils().CDial(gtk.MESSAGE_INFO, "Running repo init!", "Please run sync once more when the init process is done!")
+			Globals.TERM.feed_child("repo init -u %s -b %s\n" % (url, b))
+		Globals.TERM.feed_child("repo sync -j%s\n" % j)
+		Globals.TERM.feed_child("echo \"Complete!!!\"\n")
 	elif arg == "Compiling":
-		Utils().Compile()
+		Compile().run()
 
 def hit_event_btn(obj, event, arg):
 	print "Pressed event button: %s" % arg

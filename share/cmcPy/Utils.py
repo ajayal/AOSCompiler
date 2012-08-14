@@ -81,48 +81,6 @@ class Utils():
 		dialog.run()
 		dialog.destroy()
 
-	def Compile(self):
-		r = Parser().read("repo_path")
-		d = Parser().read("device")
-		b = Parser().read("branch")
-		if r == "Default":
-			r = Globals.myDEF_REPO_PATH
-		os.chdir(r)
-		m = Utils().getManu(d, b)
-		Globals.TERM.set_background_saturation(0.3)
-		Globals.TERM.fork_command('bash')
-		if m == None:
-			print "Here"
-			os.chdir(p)
-			Globals.TERM.feed_child('clear\n')
-			Globals.TERM.feed_child('python build/tools/roomservice.py cm_%s\n' % d)
-			Utils().CDial(gtk.MESSAGE_INFO, "<small>Running roomservice", "Roomservice is running right now, you will have to run, \"<b>Compile</b>\" again after this is done downloading your kernel and device dependancies.</small>")
-		else:
-			Parser().write("manuf", m)
-			Globals.TERM.feed_child('clear\n')
-			if not os.path.exists("%s/vendor/%s" % (r, m)) and b is not "jellybean":
-				if Utils().is_abd_running() == True:
-					os.chdir("%s/devices/%s/%s/" % (r, m, d))
-					Globals.TERM.feed_child('clear\n')
-					Globals.TERM.feed_child('./extract-files.sh\n')
-				else:
-					Globals().CDial(gtk.MESSAGE_ERROR, "Adb isn't running", "Need adb to setup vendor files.\n\nIs this something you are going to do yourself?\n\nPlease try again.")
-					Globals.TERM.set_background_saturation(1.0)
-					Globals.TERM.feed_child('clear\n')
-
-			if not os.path.exists("%s/cacheran" % Globals.myCONF_DIR) and b is not "gingerbread":
-				os.chdir(r)
-				file("%s/cacheran" % myCONF_DIR, 'w').close()
-				Globals.TERM.feed_child('bash prebuilt/linux-x86/ccache/ccache -M 50G\n')
-
-			if b is not "gingerbread":
-				Globals.TERM.feed_child('bash vendor/cm/get-prebuilts\n')
-			else:
-				Globals.TERM.feed_child('bash vendor/cyanogen/get-rommanager\n')
-
-			Globals.TERM.feed_child('source build/envsetup.sh\n')
-			Globals.TERM.feed_child("brunch %s\n" % d)
-
 	def getManu(self, arg, br):
 		s = None
 		if br == "gb":
@@ -378,6 +336,10 @@ class Utils():
 			pass
 
 		return BR
+
+	def ResetTerm(self):
+		Globals.TERM.set_background_saturation(1.0)
+		Globals.TERM.fork_command('clear')
 
 	def CDial(self, dialog_type, title, message):
 		dialog = gtk.MessageDialog(None, gtk.DIALOG_MODAL, type=dialog_type, buttons=gtk.BUTTONS_OK)
