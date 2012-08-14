@@ -93,6 +93,10 @@ class Globals():
 	myAOKP_ICS_URL = "%s/vendor_aokp/ics/vendorsetup.sh" % myAOKP_RAW_URL
 	myAOKP_JB_URL = "%s/vendor_aokp/jb/vendorsetup.sh" % myAOKP_RAW_URL
 	# Android Open Source Project
+	myGR_INIT_URL = "https://github.com/GeekRom/android_manifest.git"
+	myGR_RAW_URL = "https://raw.github.com/GeekRom"
+	myGR_JB_URL = "%s/android_vendor_geek/master/vendorsetup.sh" % myGR_RAW_URL
+	# Android Open Source Project
 	myAOSP_INIT_URL = "https://android.googlesource.com/platform/manifest"
 	myRAW_URL = "https://raw.github.com/lithid"
 	myAOSP_JB_URL = "%s/Cmcompiler/master/extras/rom/aosp/DeviceList-JB" % myRAW_URL

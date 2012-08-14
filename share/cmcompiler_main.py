@@ -101,7 +101,7 @@ for i in ["Options", "Start adb", "View config", "Repo path", "Remove config", "
 	toolsCombo.append_text(i)
 
 romCombo = gtk.combo_box_new_text()
-for i in ["Choose", "AOSP", "CM", "AOKP", "CNA"]:
+for i in ["Choose", "AOSP", "CM", "AOKP", "CNA", "GR"]:
 	romCombo.append_text(i)
 
 makeCombo = gtk.combo_box_new_text()
@@ -237,6 +237,8 @@ def rom_combo_change(event):
 			value2 = "CyanogenMod"
 		elif value == "CNA":
 			value2 = "Codename Android"
+		elif value == "GR":
+			value2 = "GeekRom"
 		else:
 			Value2 = "Android Open Source Compiler"
 		Parser().write("rom_dist", value2)

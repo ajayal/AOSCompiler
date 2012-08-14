@@ -173,6 +173,9 @@ class Utils():
 		elif rom == "CNA":
 			for x in ["jellybean"]:
 				branchList.append(x)
+		elif rom == "GR":
+			for x in ["master"]:
+				branchList.append(x)
 		else:
 			return
 
@@ -338,6 +341,14 @@ class Utils():
 			else:
 				if b == "jellybean":
 					BR = Globals.myCNA_JB_URL
+				else:
+					pass
+		elif a == "GR":
+			if arg == "init":
+				BR = Globals.myGR_INIT_URL
+			else:
+				if b == "master":
+					BR = Globals.myGR_JB_URL
 				else:
 					pass
 		elif a == "AOSP":
