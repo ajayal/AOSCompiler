@@ -81,24 +81,38 @@ class Utils():
 		dialog.run()
 		dialog.destroy()
 
-	def getManu(self, arg, br):
+	def deviceFile(self):
+		FILE = None
+		a = Parser().read("rom_abrv")
+		b = Parser().read("branch")
+		if a == "CM":
+			if b == "gb":
+				FILE = "device.mk"
+			if b == "ics" or b == "jellybean":
+				FILE = "cm.mk"
+
+		if a == "GR":
+			if b == "master":
+				FILE = "geek.mk"
+
+		return FILE
+
+	def getManu(self, device):
 		s = None
-		if br == "gb":
-			paths = glob("device/*/*/device.mk")
-		elif br == "ics" or br == "jellybean":
-			paths = glob("device/*/*/cm.mk")
+		FILE = Utils().deviceFile()
+		if FILE is not None:
+			paths = glob("device/*/*/%s" % FILE)
 		else:
 			paths = None
 
 		if paths is not None:
 			for x in paths:
-				if arg in x:
-					s = x.split("/")
-					s = s[1]
-		if s:
-			return s
-		else:
-			return None
+				if device in x:
+					i = x.split("/")
+					i = i[1]
+					s = i
+
+		return s
 
 	def which(self, program):
 		def is_exe(fpath):

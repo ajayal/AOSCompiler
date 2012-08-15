@@ -123,11 +123,17 @@ def run_vt_command(event):
 	i = entryBox.get_text()
 	r = Parser().read('repo_path')
 	d = Parser().read('device')
+	a = Parser().read('rom_abrv')
 	os.chdir(r)
 	Globals.TERM.fork_command('bash')
 	Globals.TERM.feed_child('clear\n')
 	Globals.TERM.feed_child('. build/envsetup.sh\n')
-	Globals.TERM.feed_child('lunch cm_%s-userdebug\n' % d)
+	if a == "CM":
+		Globals.TERM.feed_child('lunch cm_%s-userdebug\n' % d)
+	elif a == "GR":
+		Globals.TERM.feed_child('lunch geek_%s-userdebug\n' % d)
+	else:
+		return
 	Globals.TERM.feed_child('make -j%s %s\n' % (Globals.numprocs, i))
 
 def run_local_shell():

@@ -68,7 +68,7 @@ class InstallPackages():
 			pak = "libwxgtk2.8-dev"
 		else:
 			pak = "libwxgtk2.6-dev"
-		P = ["git-core", "gnupg", "flex", "bison", "gperf", "libsdl1.2-dev", "libesd0-dev", "squashfs-tools", "build-essential", "zip", "curl", "libncurses5-dev", "zlib1g-dev", "openjdk-6-jdk", "pngcrush", "schedtool", pak]
+		P = ["git-core", "gnupg", "flex", "bison", "gperf", "libsdl1.2-dev", "libesd0-dev", "squashfs-tools", "build-essential", "zip", "curl", "libncurses5-dev", "zlib1g-dev", "openjdk-6-jdk", "pngcrush", "libxml2-utils", "schedtool", "xsltproc", pak]
 		for x in P:
 			i = chkInstalled(x)
 			if i == False:
@@ -111,7 +111,8 @@ class InstallPackages():
 	def runInstall(self):
 		D = getLinux("Distro")
 		if D == "Ubuntu":
-			InstallPackages().Ubuntu(D)
+			V = getLinux("Version")
+			InstallPackages().Ubuntu(V)
 		else:
 			Utils().CDial(gtk.MESSAGE_WARNING, "Linux Distro", "Sorry, we couldn't detect your linux distro. File a bug report with this info:\n\n<b>Distro: </b>%s\n<b>Version: </b>%s\n<b>Name: </b>%s\n" % (plat_d, plat_v, plat_n))
 
