@@ -1,5 +1,0 @@
-#!/bin/bash
-
-CMC="/usr/share/cmcompiler"
-
-$CMC/cmcompiler_main.py

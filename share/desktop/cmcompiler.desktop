@@ -1,22 +1,11 @@
 [Desktop Entry]
 Version=0.5
-Name=CMCompiler
-Name[en_US]=CMCompiler
-GenericName=CMCompiler
-Comment=Build cyanogenmod
-Exec=cmcompiler
+Name=AOSCompiler
+Name[en_US]=AOSCompiler
+GenericName=AOSCompiler
+Comment=Build AOSP roms
+Exec=aoscompiler
 Terminal=false
-Icon=/usr/share/cmcompiler/images/cmc-icon.png
+Icon=/usr/share/aoscompiler/images/aosc-icon.png
 Type=Application
 Categories=GTK;Development;
-
-X-Ayatana-Desktop-Shortcuts=Compile;Sync;Download
-[Compile Shortcut Group]
-Name=Compile
-Exec=cmcompiler -c
-TargetEnvironment=Unity
-
-[Sync Shortcut Group]
-Name=Sync
-Exec=cmcompiler -s
-TargetEnvironment=Unity

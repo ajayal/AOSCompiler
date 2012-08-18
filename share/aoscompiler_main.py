@@ -1,16 +1,6 @@
 #!/usr/bin/env python
 
 ######################################################################
-#
-#   CMCompiler is free software. It comes without any warranty, to
-#   the extent permitted by applicable law. You can redistribute it
-#   and/or modify it under the terms of the Do What The Fuck You Want
-#   To Public License, Version 2, as published by Sam Hocevar. See
-#   http://sam.zoy.org/wtfpl/COPYING for more details.
-#
-######################################################################
-
-######################################################################
 # Python imports
 ######################################################################
 import pygtk
@@ -24,14 +14,14 @@ import webbrowser
 import shutil
 import subprocess
 
-from cmcPy.About import About
-from cmcPy.Globals import Globals
-from cmcPy.Parser import Parser
-from cmcPy.Update import Update
-from cmcPy.Utils import Utils
-from cmcPy.Compile import Compile
-from cmcPy.Sync import Sync
-from cmcPy.InstallPackages import InstallPackages
+from aoscPy.About import About
+from aoscPy.Globals import Globals
+from aoscPy.Parser import Parser
+from aoscPy.Update import Update
+from aoscPy.Utils import Utils
+from aoscPy.Compile import Compile
+from aoscPy.Sync import Sync
+from aoscPy.InstallPackages import InstallPackages
 
 ######################################################################
 # Helper functions

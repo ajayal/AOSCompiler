@@ -1,7 +1,7 @@
 #!/bin/bash
 # Install this app
 
-name="cmcompiler"
+name="aoscompiler"
 
 function install_fun() {
 
