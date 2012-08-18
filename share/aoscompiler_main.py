@@ -11,7 +11,6 @@ import platform
 import sys
 import time
 import webbrowser
-import shutil
 import subprocess
 
 from aoscPy.About import About
@@ -42,14 +41,6 @@ def custom_listdir(path):
 
 	return dirs
 
-def install_repo():
-	cmd1 = "curl https://dl-ssl.google.com/dl/googlesource/git-repo/repo > %s/repo" % (configdir)
-	cmd2 = "chmod a+x %s/repo" % (configdir)
-	cmd3 = "gksudo mv %s/repo /usr/local/bin/" % (configdir)
-	os.system(cmd1)
-	os.system(cmd2)
-	os.system(cmd3)
-
 def chk_config():
 	if not os.path.exists(Globals.myCONF_DIR):
 		os.makedirs(Globals.myCONF_DIR)
@@ -77,16 +68,9 @@ def aosp_site_clicked(obj):
 def main_about(obj):
 	About().main()
 
-def sync_button_clicked(obj):
-	vteterminal("Syncing")
-
-def compile_button_clicked(obj):
-	vteterminal("Compiling")
-
 ######################################################################
 # Some GTK globals
 ######################################################################
-myMAIN_ICON = gtk.gdk.pixbuf_new_from_file(Globals.myICON)
 
 toolsCombo = gtk.combo_box_new_text()
 for i in ["Options", "Start adb", "View config", "Repo path", "Remove config", "Run bash", "Add device", "Stop/reset", "Open rom folder", "Install packages", "Install repo"]:
@@ -131,64 +115,6 @@ def run_local_shell():
 	Globals.TERM.set_background_saturation(0.3)
 	Globals.TERM.fork_command('bash')
 
-def run_custom_device():
-	title = "Setup custom device"
-	message = "Please setup your device here:"
-	dialog = gtk.MessageDialog(None, gtk.DIALOG_MODAL, type=gtk.MESSAGE_INFO, buttons=gtk.BUTTONS_OK)
-	dialog.set_markup(title)
-	dialog.format_secondary_markup(message)
-	table = gtk.Table(8, 1, False)
-	dialog.vbox.pack_start(table)
-	label = gtk.Label()
-	label.set_markup("Device name:")
-	label.show()
-	entry = gtk.Entry()
-	entry.show()
-	label1 = gtk.Label()
-	label1.set_markup("Device manufacturer:")
-	label1.show()
-	entry1 = gtk.Entry()
-	entry1.show()
-	label2 = gtk.Label()
-	label2.set_markup("Device tree url:")
-	label2.show()
-	entry2 = gtk.Entry()
-	entry2.show()
-	label3 = gtk.Label()
-	label3.set_markup("Device tree branch:")
-	label3.show()
-	entry3 = gtk.Entry()
-	entry3.show()
-	table.attach(label, 0, 1, 0, 1, xoptions=gtk.FILL, yoptions=gtk.SHRINK)
-	table.attach(entry, 0, 1, 1, 2, xoptions=gtk.FILL, yoptions=gtk.SHRINK)
-	table.attach(label1, 0, 1, 2, 3, xoptions=gtk.FILL, yoptions=gtk.SHRINK)
-	table.attach(entry1, 0, 1, 3, 4, xoptions=gtk.FILL, yoptions=gtk.SHRINK)
-	table.attach(label2, 0, 1, 4, 5, xoptions=gtk.FILL, yoptions=gtk.SHRINK)
-	table.attach(entry2, 0, 1, 5, 6, xoptions=gtk.FILL, yoptions=gtk.SHRINK)
-	table.attach(label3, 0, 1, 6, 7, xoptions=gtk.FILL, yoptions=gtk.SHRINK)
-	table.attach(entry3, 0, 1, 7, 8, xoptions=gtk.FILL, yoptions=gtk.SHRINK)
-	table.show()
-	q = dialog.run()
-	if q == gtk.RESPONSE_OK:
-		n = entry.get_text()
-		m = entry1.get_text()
-		u = entry2.get_text()
-		b = entry3.get_text()
-		r = Parser().read("repo_path")
-		os.chdir(r)
-		manu_path = "%s/device/%s" % (r,m)
-		if not os.path.exists(manu_path):
-			os.mkdir(manu_path)
-		if os.path.exists("%s/%s" % (manu_path, n)):
-			shutil.rmtree("%s/%s" % (manu_path, n))
-		os.chdir(manu_path)
-		Globals.TERM.set_background_saturation(0.3)
-		Globals.TERM.fork_command('bash')
-		Globals.TERM.feed_child('git clone %s -b %s %s\n' % (u,b,n))
-	else:
-		Utils().CDial(gtk.MESSAGE_INFO, "Skipping this", "No changes have been made!")
-	dialog.destroy()
-
 def tools_combo_change(event):
 	value = int(toolsCombo.get_active())
 	if value == 1:
@@ -196,13 +122,13 @@ def tools_combo_change(event):
 	elif value == 2:
 		Utils().ViewConfig()
 	elif value == 3:
-		choose_repo_path()
+		Utils().choose_repo_path()
 	elif value == 4:
 		remove_config()
 	elif value == 5:
 		run_local_shell()
 	elif value == 6:
-		run_custom_device()
+		Utils().run_custom_device()
 	elif value == 7:
 		Utils().ResetTerm()
 	elif value == 8:
@@ -274,18 +200,6 @@ def run_button(event):
 	if isit == None:
 		Utils().ResetTerm()
 
-def choose_repo_path():
-	direct = gtk.FileChooserDialog("Repo path...", action=gtk.FILE_CHOOSER_ACTION_SELECT_FOLDER, buttons=(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL, gtk.STOCK_OK, gtk.RESPONSE_ACCEPT))
-	r = direct.run()
-	repo_dir = direct.get_filename()
-	direct.destroy()
-	if r == gtk.RESPONSE_ACCEPT:
-		try:
-			Parser().write("repo_path", repo_dir)
-			Update().TEXT()
-		except NameError:
-			pass
-
 def remove_config():
 	q = Utils().QDial("Remove config?", "Are you sure you want to remove your current config?\n\nOnce this is done it can't be undone.")
 	if q == True:
@@ -321,7 +235,7 @@ class advanced():
 		elif i == "b" and data.state & gtk.gdk.CONTROL_MASK:
 			Compile().run()
 		elif i == "r" and data.state & gtk.gdk.CONTROL_MASK:
-			choose_repo_path()
+			Utils().choose_repo_path()
 		elif i == "x" and data.state & gtk.gdk.CONTROL_MASK or i == "Escape":
 			gtk.main_quit()
 		else:
@@ -329,6 +243,7 @@ class advanced():
  
 	# Main program
 	def main(self):
+		myMAIN_ICON = gtk.gdk.pixbuf_new_from_file(Globals.myICON)
 		Globals.MAIN_WIN.set_title(Globals.myMainTitle)
 		Globals.MAIN_WIN.set_position(gtk.WIN_POS_CENTER_ALWAYS)
 		Globals.MAIN_WIN.set_icon(myMAIN_ICON)

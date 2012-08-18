@@ -6,6 +6,7 @@ from glob import glob
 import urllib
 import urllib2
 import re
+import shutil
 import commands
 
 from Globals import Globals
@@ -142,7 +143,7 @@ class Utils():
 			return
 
 		def callback_branch(widget, data=None):
-			print "%s was toggled %s" % (data, ("OFF", "ON")[widget.get_active()])
+			#print "%s was toggled %s" % (data, ("OFF", "ON")[widget.get_active()])
 			Parser().write("branch", data)
 
 		dialog = gtk.Dialog("Choose branch", None, gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT, (gtk.STOCK_CANCEL, gtk.RESPONSE_REJECT, gtk.STOCK_OK, gtk.RESPONSE_ACCEPT))
@@ -314,7 +315,7 @@ class Utils():
 				else:
 					pass
 		elif a == "AOSP":
-			print b
+			#print b
 			if arg == "init":
 				BR = Globals.myAOSP_INIT_URL
 			else:
@@ -344,6 +345,76 @@ class Utils():
 	def ResetTerm(self):
 		Globals.TERM.set_background_saturation(1.0)
 		Globals.TERM.fork_command('clear')
+
+	def choose_repo_path(self):
+		direct = gtk.FileChooserDialog("Repo path...", action=gtk.FILE_CHOOSER_ACTION_SELECT_FOLDER, buttons=(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL, gtk.STOCK_OK, gtk.RESPONSE_ACCEPT))
+		r = direct.run()
+		repo_dir = direct.get_filename()
+		direct.destroy()
+		if r == gtk.RESPONSE_ACCEPT:
+			try:
+				Parser().write("repo_path", repo_dir)
+				Update().TEXT()
+			except NameError:
+				pass
+
+	def run_custom_device(self):
+		title = "Setup custom device"
+		message = "Please setup your device here:"
+		dialog = gtk.MessageDialog(None, gtk.DIALOG_MODAL, type=gtk.MESSAGE_INFO, buttons=gtk.BUTTONS_OK)
+		dialog.set_markup(title)
+		dialog.format_secondary_markup(message)
+		table = gtk.Table(8, 1, False)
+		dialog.vbox.pack_start(table)
+		label = gtk.Label()
+		label.set_markup("Device name:")
+		label.show()
+		entry = gtk.Entry()
+		entry.show()
+		label1 = gtk.Label()
+		label1.set_markup("Device manufacturer:")
+		label1.show()
+		entry1 = gtk.Entry()
+		entry1.show()
+		label2 = gtk.Label()
+		label2.set_markup("Device tree url:")
+		label2.show()
+		entry2 = gtk.Entry()
+		entry2.show()
+		label3 = gtk.Label()
+		label3.set_markup("Device tree branch:")
+		label3.show()
+		entry3 = gtk.Entry()
+		entry3.show()
+		table.attach(label, 0, 1, 0, 1, xoptions=gtk.FILL, yoptions=gtk.SHRINK)
+		table.attach(entry, 0, 1, 1, 2, xoptions=gtk.FILL, yoptions=gtk.SHRINK)
+		table.attach(label1, 0, 1, 2, 3, xoptions=gtk.FILL, yoptions=gtk.SHRINK)
+		table.attach(entry1, 0, 1, 3, 4, xoptions=gtk.FILL, yoptions=gtk.SHRINK)
+		table.attach(label2, 0, 1, 4, 5, xoptions=gtk.FILL, yoptions=gtk.SHRINK)
+		table.attach(entry2, 0, 1, 5, 6, xoptions=gtk.FILL, yoptions=gtk.SHRINK)
+		table.attach(label3, 0, 1, 6, 7, xoptions=gtk.FILL, yoptions=gtk.SHRINK)
+		table.attach(entry3, 0, 1, 7, 8, xoptions=gtk.FILL, yoptions=gtk.SHRINK)
+		table.show()
+		q = dialog.run()
+		if q == gtk.RESPONSE_OK:
+			n = entry.get_text()
+			m = entry1.get_text()
+			u = entry2.get_text()
+			b = entry3.get_text()
+			r = Parser().read("repo_path")
+			os.chdir(r)
+			manu_path = "%s/device/%s" % (r,m)
+			if not os.path.exists(manu_path):
+				os.mkdir(manu_path)
+			if os.path.exists("%s/%s" % (manu_path, n)):
+				shutil.rmtree("%s/%s" % (manu_path, n))
+			os.chdir(manu_path)
+			Globals.TERM.set_background_saturation(0.3)
+			Globals.TERM.fork_command('bash')
+			Globals.TERM.feed_child('git clone %s -b %s %s\n' % (u,b,n))
+		else:
+			Utils().CDial(gtk.MESSAGE_INFO, "Skipping this", "No changes have been made!")
+		dialog.destroy()
 
 	def CDial(self, dialog_type, title, message):
 		dialog = gtk.MessageDialog(None, gtk.DIALOG_MODAL, type=dialog_type, buttons=gtk.BUTTONS_OK)
