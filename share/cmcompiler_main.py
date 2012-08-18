@@ -30,6 +30,7 @@ from cmcPy.Parser import Parser
 from cmcPy.Update import Update
 from cmcPy.Utils import Utils
 from cmcPy.Compile import Compile
+from cmcPy.Sync import Sync
 from cmcPy.InstallPackages import InstallPackages
 
 ######################################################################
@@ -203,7 +204,7 @@ def tools_combo_change(event):
 	if value == 1:
 		start_adb()
 	elif value == 2:
-		view_config()
+		Utils().ViewConfig()
 	elif value == 3:
 		choose_repo_path()
 	elif value == 4:
@@ -213,7 +214,7 @@ def tools_combo_change(event):
 	elif value == 6:
 		run_custom_device()
 	elif value == 7:
-		main_cmc_cmd()
+		Utils().ResetTerm()
 	elif value == 8:
 		openBuildFolder()
 	elif value == 9:
@@ -254,6 +255,7 @@ def rom_combo_change(event):
 		Parser().write("rom_abrv", value)
 		Parser().write("branch", "Default")
 		Parser().write("device", "Default")
+		Parser().write("manuf", "Default")
 		Update().TEXT()
 	romCombo.set_active(0)
 
@@ -264,24 +266,23 @@ def device_button(event):
 def run_button(event):
 	isit = None
 	r = Parser().read("repo_path")
+	os.chdir(r)
 	Globals.TERM.set_background_saturation(0.3)
 	Globals.TERM.fork_command('clear')
 	Globals.TERM.fork_command('bash')
 	if 	Globals.checkClobber.get_active() == True:
 		isit = True
-		os.chdir(r)
-		Globals.TERM.feed_child('')
+		Globals.TERM.feed_child('make clobber\n')
 
 	if Globals.checkSync.get_active() == True:
-		isit = True
-		compile_or_sync("Syncing")
+		Sync().run()
 
 	if Globals.checkCompile.get_active() == True:
 		isit = True
 		Compile().run()
 
 	if isit == None:
-		main_cmc_cmd()
+		Utils().ResetTerm()
 
 def choose_repo_path():
 	direct = gtk.FileChooserDialog("Repo path...", action=gtk.FILE_CHOOSER_ACTION_SELECT_FOLDER, buttons=(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL, gtk.STOCK_OK, gtk.RESPONSE_ACCEPT))
@@ -305,41 +306,8 @@ def start_adb():
 	Globals.TERM.set_background_saturation(0.3)
 	Globals.TERM.fork_command(Globals.myA_ADB_START)
 
-def view_config():
-	Utils().ViewConfig()
-
-def main_cmc_cmd():
-	Utils().ResetTerm()
-
-def compile_or_sync(arg):
-	if arg == "Syncing":
-		repo = Utils().which("repo")
-		if repo == None:
-			Utils().CDial(gtk.MESSAGE_INFO, "Repo is not installed", "You need to install repo to continue.")
-			main_cmc_cmd()
-			return
-		r = Parser().read("repo_path")
-		url = Utils().getBranchUrl("init")
-		b = Parser().read("branch")
-		j = Parser().read("sync_jobs")
-		if not os.path.exists(r):
-			os.mkdir(r)
-		os.chdir(r)
-		Globals.TERM.set_background_saturation(0.3)
-		Globals.TERM.fork_command('bash')
-		if not os.path.exists("%s/.repo" % r):
-			Utils().CDial(gtk.MESSAGE_INFO, "Running repo init!", "Please run sync once more when the init process is done!")
-			Globals.TERM.feed_child("repo init -u %s -b %s\n" % (url, b))
-		Globals.TERM.feed_child("repo sync -j%s\n" % j)
-		Globals.TERM.feed_child("echo \"Complete!!!\"\n")
-	elif arg == "Compiling":
-		Compile().run()
-
 def hit_event_btn(obj, event, arg):
 	print "Pressed event button: %s" % arg
-
-def main_sync_compile_btn(obj, arg):
-	compile_or_sync(arg)
 
 ######################################################################
 # Advanced
@@ -353,15 +321,15 @@ class advanced():
 		i = gtk.gdk.keyval_name(data.keyval)
 
 		if i == "v" and data.state & gtk.gdk.CONTROL_MASK:
-			view_config()
+			Utils().ViewConfig()
 		elif i == "a" and data.state & gtk.gdk.CONTROL_MASK:
 			start_adb()
 		elif i == "m" and data.state & gtk.gdk.CONTROL_MASK:
-			main_cmc_cmd()
+			Utils().ResetTerm()
 		elif i == "s" and data.state & gtk.gdk.CONTROL_MASK:
-			compile_or_sync("Syncing")
+			Sync().run()
 		elif i == "b" and data.state & gtk.gdk.CONTROL_MASK:
-			compile_or_sync("Compiling")
+			Compile().run()
 		elif i == "r" and data.state & gtk.gdk.CONTROL_MASK:
 			choose_repo_path()
 		elif i == "x" and data.state & gtk.gdk.CONTROL_MASK or i == "Escape":
@@ -511,7 +479,6 @@ class advanced():
 		buildFrame.add(buildTable)
 		Globals.runFrameLab.show()
 		buildFrame.set_label_widget(Globals.runFrameLab)
-		#buildFrame.set_border_width(5)
 		buildFrame.show()
 
 		# Entrybox stuff

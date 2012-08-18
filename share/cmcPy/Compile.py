@@ -33,15 +33,9 @@ class Compile():
 		r = Parser().read("repo_path")
 		d = Parser().read("device")
 		b = Parser().read("branch")
-		if r == "Default":
-			r = Globals.myDEF_REPO_PATH
-		os.chdir(r)
 		m = Utils().getManu(d)
-		Globals.TERM.set_background_saturation(0.3)
-		Globals.TERM.fork_command('bash')
+		Globals.TERM.feed_child('clear\n')
 		if m == None:
-			os.chdir(p)
-			Globals.TERM.feed_child('clear\n')
 			Globals.TERM.feed_child('python build/tools/roomservice.py cm_%s\n' % d)
 			Utils().CDial(gtk.MESSAGE_INFO, "<small>Running roomservice", "Roomservice is running right now, you will have to run, \"<b>Compile</b>\" again after this is done downloading your kernel and device dependancies.</small>")
 		else:
@@ -74,17 +68,12 @@ class Compile():
 		r = Parser().read("repo_path")
 		d = Parser().read("device")
 		b = Parser().read("branch")
-		if r == "Default":
-			r = Globals.myDEF_REPO_PATH
-		os.chdir(r)
 		m = Utils().getManu(d)
 		if m == None:
 			Utils().CDial(gtk.MESSAGE_INFO, "Couldn't find device manufacturer", "Please try again.\n\nReturned: %s" % m)
 			return
 
 		Parser().write("manuf", m)
-		Globals.TERM.set_background_saturation(0.3)
-		Globals.TERM.fork_command('bash')
 		Globals.TERM.feed_child('clear\n')
 		if not os.path.exists("%s/vendor/%s" % (r, m)):
 			Globals.TERM.feed_child("cd %s/device/%s/%s/\n" % (r, m, d))
