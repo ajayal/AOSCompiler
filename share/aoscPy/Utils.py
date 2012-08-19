@@ -255,12 +255,19 @@ class Utils():
 		button_count = 0
 		for lines in filehandle.readlines():
 
-			if "combo" in lines and not "#" in lines:
+			if not "#" in lines:
+				line = lines.strip()
 				button_count += 1
 				button = "button%s" % (button_count)
 
-				x = lines.split(" ")
-				radio = x[1]
+				try:
+					if line:
+						x = line.split(" ")
+						radio = x[1]
+					else:
+						break
+				except:
+					radio = line.strip()
 				x = radio.split("_")
 				radio = x[1]
 				x = radio.split("-")

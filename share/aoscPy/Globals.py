@@ -68,8 +68,8 @@ class Globals():
 	myCM_URL = "https://github.com/CyanogenMod"
 	myCM_RAW_URL = "https://raw.github.com/CyanogenMod"
 	myCM_INIT_URL = "https://github.com/CyanogenMod/android.git"
-	myCM_JB_URL = "%s/android_vendor_cm/jellybean/vendorsetup.sh" % myCM_RAW_URL
-	myCM_ICS_URL = "%s/android_vendor_cm/ics/vendorsetup.sh" % myCM_RAW_URL
+	myCM_JB_URL = "%s/android_vendor_cm/jellybean/jenkins-build-targets" % myCM_RAW_URL
+	myCM_ICS_URL = "%s/android_vendor_cm/ics/jenkins-build-targets" % myCM_RAW_URL
 	myCM_GB_URL = "%s/android_vendor_cyanogen/gingerbread/vendorsetup.sh" % myCM_RAW_URL
 	# Codename Android
 	myCNA_URL = "https://github.com/CNA"
