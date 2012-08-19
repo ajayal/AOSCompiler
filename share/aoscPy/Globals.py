@@ -27,9 +27,9 @@ class Globals():
 	#####
 	# Aosp
 	aospScreenyList = []
-	aospScreeny1 = "https://raw.github.com/lithid/Cmcompiler/master/extras/rom/aosp/screeny1.jpg"
-	aospScreeny2 = "https://raw.github.com/lithid/Cmcompiler/master/extras/rom/aosp/screeny2.jpg"
-	aospScreeny3 = "https://raw.github.com/lithid/Cmcompiler/master/extras/rom/aosp/screeny3.jpg"
+	aospScreeny1 = "https://raw.github.com/lithid/AOSCompiler/master/extras/rom/aosp/screeny1.jpg"
+	aospScreeny2 = "https://raw.github.com/lithid/AOSCompiler/master/extras/rom/aosp/screeny2.jpg"
+	aospScreeny3 = "https://raw.github.com/lithid/AOSCompiler/master/extras/rom/aosp/screeny3.jpg"
 	aospScreenyList.append(aospScreeny1)
 	aospScreenyList.append(aospScreeny2)
 	aospScreenyList.append(aospScreeny3)
@@ -89,9 +89,9 @@ class Globals():
 	# Android Open Source Project
 	myAOSP_INIT_URL = "https://android.googlesource.com/platform/manifest"
 	myRAW_URL = "https://raw.github.com/lithid"
-	myAOSP_JB_URL = "%s/Cmcompiler/master/extras/rom/aosp/DeviceList-JB" % myRAW_URL
-	myAOSP_ICS_URL = "%s/Cmcompiler/master/extras/rom/aosp/DeviceList-ICS" % myRAW_URL
-	myAOSP_GB_URL = "%s/Cmcompiler/master/extras/rom/aosp/DeviceList-GB" % myRAW_URL
+	myAOSP_JB_URL = "%s/AOSCompiler/master/extras/rom/aosp/DeviceList-JB" % myRAW_URL
+	myAOSP_ICS_URL = "%s/AOSCompiler/master/extras/rom/aosp/DeviceList-ICS" % myRAW_URL
+	myAOSP_GB_URL = "%s/AOSCompiler/master/extras/rom/aosp/DeviceList-GB" % myRAW_URL
 
 	# Meh
 	myDEF_BRANCH = "ics"
