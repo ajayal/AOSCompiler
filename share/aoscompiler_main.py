@@ -16,7 +16,6 @@ import subprocess
 from aoscPy.About import About
 from aoscPy.Globals import Globals
 from aoscPy.Parser import Parser
-from aoscPy.Update import Update
 from aoscPy.Utils import Utils
 from aoscPy.Compile import Compile
 from aoscPy.Sync import Sync
@@ -172,12 +171,12 @@ def rom_combo_change(event):
 		Parser().write("branch", "Default")
 		Parser().write("device", "Default")
 		Parser().write("manuf", "Default")
-		Update().TEXT()
+		Utils().update()
 	romCombo.set_active(0)
 
 def device_button(event):
 	Utils().Devices()
-	Update().TEXT()
+	Utils().update()
 
 def run_button(event):
 	isit = None
@@ -191,6 +190,7 @@ def run_button(event):
 		Globals.TERM.feed_child('make clobber\n')
 
 	if Globals.checkSync.get_active() == True:
+		isit = True
 		Sync().run()
 
 	if Globals.checkCompile.get_active() == True:
@@ -451,7 +451,7 @@ class advanced():
 		tableB.attach(tableEntry, 1, 2, 0, 1, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
 		tableB.attach(linksFrame, 2, 3, 0, 1, xoptions=gtk.EXPAND, yoptions=gtk.EXPAND)
 
-		Update().TEXT()
+		Utils().update()
 
 		Globals.MAIN_WIN.add(MAIN_VBOX)
 		Globals.MAIN_WIN.show_all()

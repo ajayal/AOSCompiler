@@ -7,8 +7,6 @@ import commands
 
 from Globals import Globals
 from Utils import Utils
-#from Parser import Parser
-#from Update import Update
 
 def chkInstalled(arg):
 

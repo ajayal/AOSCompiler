@@ -6,7 +6,6 @@ import os
 from Globals import Globals
 from Parser import Parser
 from Utils import Utils
-#from Update import Update
 
 class Compile():
 	def run(self):
