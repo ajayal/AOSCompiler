@@ -63,4 +63,4 @@ class CodenameAndroid():
 
 		Globals.TERM.feed_child('source build/envsetup.sh\n')
 		Globals.TERM.feed_child("lunch cna_%s-userdebug\n" % d)
-		Globals.TERM.feed_child("time make -j%s otapackage\n" % Globals.numprocs)
+		Globals.TERM.feed_child("time make -j%s otapackage\n" % Globals.PROCESSORS)

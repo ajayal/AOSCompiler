@@ -26,8 +26,6 @@ from aoscPy.InstallPackages import InstallPackages
 # Helper functions
 ######################################################################
 
-PROCESSORS = Utils().processors()
-
 def openBuildFolder():
 	r = Parser().read("repo_path")
 	d = Parser().read("device")
@@ -83,7 +81,7 @@ for i in ["Choose", "AOSP", "CM", "AOKP", "CNA", "GR"]:
 	romCombo.append_text(i)
 
 makeCombo = gtk.combo_box_new_text()
-for i in range(1,PROCESSORS+1):
+for i in range(1,Globals.PROCESSORS+1):
 	makeCombo.append_text(str(i))
 
 syncCombo = gtk.combo_box_new_text()
@@ -111,7 +109,7 @@ def run_vt_command(event):
 		Globals.TERM.feed_child('lunch geek_%s-userdebug\n' % d)
 	else:
 		return
-	Globals.TERM.feed_child('make -j%s %s\n' % (PROCESSORS, i))
+	Globals.TERM.feed_child('make -j%s %s\n' % (Globals.PROCESSORS, i))
 
 def run_local_shell():
 	Globals.TERM.set_background_saturation(0.3)

@@ -85,4 +85,4 @@ class CyanogenMod():
 		else:
 			Globals.TERM.feed_child("lunch cm_%s-userdebug\n" % d)
 		Globals.TERM.feed_child("lunch cm_%s-userdebug\n" % d)
-		Globals.TERM.feed_child("time make -j%s otapackage\n" % Utils().processors())
+		Globals.TERM.feed_child("time make -j%s otapackage\n" % Globals.PROCESSORS)

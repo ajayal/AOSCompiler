@@ -14,13 +14,6 @@ from Parser import Parser
 
 class Utils():
 
-	def processors(self):
-		count = 0
-		for line in open('/proc/cpuinfo', 'r'):
-			if line.startswith('processor'):
-				count += 1
-		return count
-
 	def is_adb_running(self):
 		running = False
 		cmd = commands.getoutput("adb devices")

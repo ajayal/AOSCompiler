@@ -4,6 +4,8 @@ import os
 import gtk
 import vte
 
+from Tools import Tools
+
 class Globals():
 
 	# Resources
@@ -33,6 +35,8 @@ class Globals():
 	myFORUM_URL = "http://forum.xda-developers.com/showthread.php?t=1415661"
 	myDONATE = "http://forum.xda-developers.com/donatetome.php?u=2709018"
 	myREPO_TOOL_URL = "https://dl-ssl.google.com/dl/googlesource/git-repo/repo"
+
+	PROCESSORS = Tools().processor()
 
 	# Device lists
 	dl_version = None

@@ -103,7 +103,7 @@ class Parser():
 		elif getMakeJobs:
 			config.set(title, 'make_jobs', getMakeJobs)
 		else:
-			config.set(title, 'make_jobs', Globals.numprocs)
+			config.set(title, 'make_jobs', Globals.PROCESSORS)
 		
 		if arg == "manuf":
 			config.set(title, 'manuf', value)
