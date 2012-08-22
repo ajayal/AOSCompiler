@@ -19,7 +19,7 @@ class AOSP():
 
 	BranchList = ["gingerbread", "ics-mr1", "android-4.1.1_r4", "master"]
 
-	AboutDesc = "Type some things here about the rom and about it's design!"
+	AboutDesc = "<small><b>Type</b> some things here about the rom and about it's design! <b>Type</b> some things here about the rom and about it's design!</small>"
 
 	# GeekRom Images
 	Images = ["screeny1.jpg", "screeny2.jpg", "screeny3.jpg"]
