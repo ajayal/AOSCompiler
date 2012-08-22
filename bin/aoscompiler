@@ -1,5 +1,0 @@
-#!/bin/bash
-
-CMC="/usr/share/aoscompiler"
-
-$CMC/aoscompiler_main.py

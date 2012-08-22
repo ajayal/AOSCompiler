@@ -23,7 +23,8 @@ class Sync():
 		Globals.TERM.feed_child("cd %s\n" % r)
 		if not os.path.exists("%s/.repo" % r):
 			Globals.TERM.feed_child("repo init -u %s -b %s\n" % (url, b))
+			Globals.TERM.feed_child("y\n")
 			Utils().CDial(gtk.MESSAGE_INFO, "Running repo init!", "You needed to init the repo, doing that now.")
 		Globals.TERM.feed_child("repo sync -j%s\n" % j)
-		Globals.TERM.feed_child("echo \"Complete!!!\"\n")
+		Globals.TERM.feed_child("echo \"Complete!\"\n")
 

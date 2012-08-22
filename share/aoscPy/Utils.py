@@ -13,6 +13,14 @@ from Globals import Globals
 from Parser import Parser
 
 class Utils():
+
+	def processors(self):
+		count = 0
+		for line in open('/proc/cpuinfo', 'r'):
+			if line.startswith('processor'):
+				count += 1
+		return count
+
 	def is_adb_running(self):
 		running = False
 		cmd = commands.getoutput("adb devices")
@@ -124,19 +132,24 @@ class Utils():
 		branchList = []
 		rom = Parser().read("rom_abrv")
 		if rom == "CM":
-			for x in ["gingerbread", "ics", "jellybean"]:
+			from projects.CyanogenMod import CyanogenMod as CM
+			for x in CM.BranchList:
 				branchList.append(x)
 		elif rom == "AOKP":
-			for x in ["ics", "jb"]:
+			from projects.AOKP import AOKP as AOKP
+			for x in AOKP.BranchList:
 				branchList.append(x)
 		elif rom == "AOSP":
-			for x in ["gingerbread", "gingerbread-release", "ics-mr1", "jb-dev", "android-4.1.1_r4", "master"]:
+			from projects.AOSP import AOSP as AOSP
+			for x in AOSP.BranchList:
 				branchList.append(x)
 		elif rom == "CNA":
-			for x in ["jellybean"]:
+			from projects.CodenameAndroid import CodenameAndroid as CNA
+			for x in CNA.BranchList:
 				branchList.append(x)
 		elif rom == "GR":
-			for x in ["master"]:
+			from projects.GeekRom import GeekRom as GR
+			for x in GR.BranchList:
 				branchList.append(x)
 		else:
 			return
@@ -180,16 +193,17 @@ class Utils():
 		r = Parser().read("rom_dist")
 		a = Parser().read("rom_abrv")
 		if a == "AOSP":
-			ImageList = Globals.aospScreenyList
+			from projects.AOSP import AOSP as AOSP
+			ImageList = AOSP.ScreenList
+			Desc = AOSP.AboutDesc
+		elif a == "GR":
+			from projects.GeekRom import GeekRom as GR
+			ImageList = GR.ScreenList
+			Desc = GR.AboutDesc
 		else:
-			ImageList = None
 			return
 		dialog = gtk.Dialog("About: %s" % r, None, gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT, (gtk.STOCK_OK, gtk.RESPONSE_ACCEPT))
 		dialog.set_resizable(False)
-
-		label = gtk.Label(a)
-		label.show()
-		dialog.vbox.pack_start(label, True, True, 0)
 
 		table = gtk.Table(2, 1, False)
 		table.show()
@@ -197,7 +211,7 @@ class Utils():
 		scroll = gtk.ScrolledWindow()
 		scroll.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_ALWAYS)
 		scroll.add_with_viewport(table)
-		scroll.set_size_request(700, 475)
+		scroll.set_size_request(425, 475)
 		scroll.show()
 		frame = gtk.Frame()
 		frame.add(scroll)
@@ -216,10 +230,23 @@ class Utils():
 			image.set_from_pixbuf(loader.get_pixbuf())
 			table.attach(image, count-1, count, 0, 1, xpadding=20, ypadding=10)
 
+		label = gtk.Label()
+		label.set_markup(Desc)
+		label.show()
+		label.set_line_wrap(True)
+		DFrame = gtk.Frame()
+		DFrame.add(label)
+		DFrame.set_label(a)
+		DFrame.set_border_width(10)
+		DFrame.show()
+		dialog.vbox.pack_start(DFrame, True, True, 5)
+
 		dialog.run()
 		dialog.destroy()
 
 	def Devices(self):
+		VERBOSE = Parser().read("verbose")
+
 		def callback_device(widget, data=None):
 			Parser().write("device", data)
 
@@ -252,6 +279,9 @@ class Utils():
 			Utils().CDial(gtk.MESSAGE_ERROR, "Can't read file!", "Can't read the file to setup devices!\n\nPlease check you internet connections and try again!")
 
 		button_count = 0
+		if VERBOSE == True:
+			print "##########"
+			print "# Reading URL: %s" % BR
 		for lines in filehandle.readlines():
 
 			if not "#" in lines:
@@ -267,10 +297,33 @@ class Utils():
 						break
 				except:
 					radio = line.strip()
-				x = radio.split("_")
-				radio = x[1]
+
+				if VERBOSE == True:
+					print "# Reading line: %s" % line
+					print "##########"
+					print radio
 				x = radio.split("-")
+				if VERBOSE == True:
+					print x
 				radio = x[0]
+				x = radio.split("_")
+				if VERBOSE == True:
+					print x
+				number = len(x)
+				if VERBOSE == True:
+					print number
+				if number is not 2:
+					f = x[1]
+					b = x[2]
+					radio = "%s_%s" % (f, b)
+					if VERBOSE == True:
+						print radio
+				else:
+					radio = x[1]
+					if VERBOSE == True:
+						print radio
+				if VERBOSE == True:
+					print "##########"
 
 				button = gtk.RadioButton(group=device, label="%s" % (radio))
 				button.connect("toggled", callback_device, "%s" % (radio))
@@ -290,59 +343,23 @@ class Utils():
 		a = a.strip()
 		if b == "Default":
 			Utils().CDial(gtk.MESSAGE_ERROR, "No branch choosen", "Please select a branch so I know which device list to pull.\n\nThanks!")
-			return None
+			return
 
 		if a == "CM":
-			if arg == "init":
-				BR = Globals.myCM_INIT_URL
-			else:
-				if b == "gingerbread":
-					BR = Globals.myCM_GB_URL
-				elif b == "ics":
-					BR = Globals.myCM_ICS_URL
-				elif b == "jellybean":
-					BR = Globals.myCM_JB_URL
-				else:
-					pass
+			from projects.CyanogenMod import CyanogenMod as CM
+			BR = CM().getBranch(arg)
 		elif a == "CNA":
-			if arg == "init":
-				BR = Globals.myCNA_INIT_URL
-			else:
-				if b == "jellybean":
-					BR = Globals.myCNA_JB_URL
-				else:
-					pass
+			from projects.CodenameAndroid import CodenameAndroid as CNA
+			BR = CNA().getBranch(arg)
 		elif a == "GR":
-			if arg == "init":
-				BR = Globals.myGR_INIT_URL
-			else:
-				if b == "master":
-					BR = Globals.myGR_JB_URL
-				else:
-					pass
+			from projects.GeekRom import GeekRom as GR
+			BR = GR().getBranch(arg)
 		elif a == "AOSP":
-			#print b
-			if arg == "init":
-				BR = Globals.myAOSP_INIT_URL
-			else:
-				if b == "gingerbread" or b == "gingerbread-release":
-					BR = Globals.myAOSP_GB_URL
-				elif b == "ics-mr1":
-					BR = Globals.myAOSP_ICS_URL
-				elif b == "android-4.1.1_r4" or b == "jb-dev":
-					BR = Globals.myAOSP_JB_URL
-				else:
-					pass
+			from projects.AOSP import AOSP as AOSP
+			BR = AOSP().getBranch(arg)
 		elif a == "AOKP":
-			if arg == "init":
-				BR = Globals.myAOKP_INIT_URL
-			else:
-				if b == "ics":
-					BR = Globals.myAOKP_ICS_URL
-				elif b == "jb":
-					BR = Globals.myAOKP_JB_URL
-				else:
-					pass
+			from projects.AOKP import AOKP as AOKP
+			BR = AOKP().getBranch(arg)
 		else:
 			pass
 

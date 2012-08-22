@@ -15,6 +15,15 @@ class Parser():
 		except ConfigParser.NoSectionError:
 			c = "%s" % (default)
 
+		if c == "True":
+			c = True
+
+		if c == "False":
+			c = False
+
+		if c == "None":
+			c = None
+
 		return c
 
 	def write(self, arg, value):
@@ -31,8 +40,9 @@ class Parser():
 			getSyncJobs = config.get(title, 'sync_jobs')
 			getMakeJobs = config.get(title, 'make_jobs')
 			getManuf = config.get(title, 'manuf')
+			getVerbose = config.get(title, 'verbose')
 
-		except ConfigParser.NoSectionError:
+		except:
 			getRomDist = None
 			getRomAbrv = None
 			getDevice = None
@@ -41,6 +51,7 @@ class Parser():
 			getSyncJobs = None
 			getMakeJobs = None
 			getManuf = None
+			getVerbose = None
 
 		config = ConfigParser.RawConfigParser()
 		config.add_section(title)
@@ -50,7 +61,7 @@ class Parser():
 		elif getRomDist:
 			config.set(title, 'rom_dist', getRomDist)
 		else:
-			config.set(title, 'rom_dist', default)
+			config.set(title, 'rom_dist', "Android Open Source Compiler")
 
 		if arg == "rom_abrv":
 			config.set(title, 'rom_abrv', value)
@@ -100,6 +111,13 @@ class Parser():
 			config.set(title, 'manuf', getManuf)
 		else:
 			config.set(title, 'manuf', default)
+
+		if arg == "verbose":
+			config.set(title, 'verbose', value)
+		elif getVerbose:
+			config.set(title, 'verbose', getVerbose)
+		else:
+			config.set(title, 'verbose', False)
 
 		with open(Globals.myCONF, 'wb') as configfile:
     			config.write(configfile)
