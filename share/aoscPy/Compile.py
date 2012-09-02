@@ -2,6 +2,7 @@
 
 import gtk
 import pygtk
+import pygtk
 import os
 
 from Globals import Globals
