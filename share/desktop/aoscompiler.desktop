@@ -1,7 +1,7 @@
 [Desktop Entry]
 Version=0.1
 Name=AOSCompiler
-Name[en_US]=aoscompiler.desktop
+Name[en_US]=AOSCompiler
 GenericName=AOSCompiler
 Comment=Build AOSP roms
 Exec=aoscompiler
