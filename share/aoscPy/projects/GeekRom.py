@@ -2,9 +2,11 @@
 
 import pygtk
 pygtk.require('2.0')
+import os
 
 from ..Globals import Globals
 from ..Parser import Parser
+from ..Utils import Utils
 
 ######################################################################
 # About

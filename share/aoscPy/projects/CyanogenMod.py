@@ -1,10 +1,13 @@
 #!/usr/bin/env python
 
 import pygtk
+import gtk
 pygtk.require('2.0')
+import os
 
 from ..Globals import Globals
 from ..Parser import Parser
+from ..Utils import Utils
 
 ######################################################################
 # About
@@ -60,17 +63,18 @@ class CyanogenMod():
 			Globals.TERM.feed_child('clear\n')
 			if not os.path.exists("%s/vendor/%s" % (r, m)) and b is not "jellybean":
 				if Utils().is_adb_running() == True:
-					os.chdir("%s/device/%s/%s/" % (r, m, d))
+					Globals.TERM.feed_child("cd %s/device/%s/%s/\n" % (r, m, d))
 					Globals.TERM.feed_child('clear\n')
 					Globals.TERM.feed_child('./extract-files.sh\n')
+					Globals.TERM.feed_child("cd %s\n" % r)
 				else:
-					Globals().CDial(gtk.MESSAGE_ERROR, "Adb isn't running", "Need adb to setup vendor files.\n\nIs this something you are going to do yourself?\n\nPlease try again.")
+					Utils().CDial(gtk.MESSAGE_ERROR, "Adb isn't running", "Need adb to setup vendor files.\n\nIs this something you are going to do yourself?\n\nPlease try again.")
 					Globals.TERM.set_background_saturation(1.0)
 					Globals.TERM.feed_child('clear\n')
 
 			if not os.path.exists("%s/cacheran" % Globals.myCONF_DIR) and b is not "gingerbread":
 				os.chdir(r)
-				file("%s/cacheran" % myCONF_DIR, 'w').close()
+				file("%s/cacheran" % Globals.myCONF_DIR, 'w').close()
 				Globals.TERM.feed_child('bash prebuilt/linux-x86/ccache/ccache -M 50G\n')
 
 			if b is not "gingerbread":
