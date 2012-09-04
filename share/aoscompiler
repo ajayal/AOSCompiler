@@ -212,7 +212,32 @@ def start_adb():
 	Globals.TERM.fork_command(Globals.myA_ADB_START)
 
 def hit_event_btn(obj, event, arg):
-	print "Pressed event button: %s" % arg
+	T = None
+	if arg == "Gmail":
+		url = "mailto:mrlithid@gmail.com"
+		T = True
+	elif arg == "Twitter":
+		url = "http://twitter.com/lithid"
+		T = True
+	elif arg == "GooglePlus":
+		url = "https://plus.google.com/u/0/103024643047948973176/posts"
+		T = True
+	elif arg == "Xda":
+		url = "http://forum.xda-developers.com/showthread.php?t=1789190"
+		T = True
+	elif arg == "Youtube":
+		url = "http://www.youtube.com/user/MrLithid"
+		T = True
+	elif arg == "Gallery":
+		url = "mailto:mrlithid@gmail.com"
+		T = True
+	else:
+		url = None
+
+	if T is not None:
+		subprocess.call(('xdg-open', url))
+	else:
+		Utils().CDial(gtk.MESSAGE_ERROR, "No Url found!", "There is something wrong with the app. Report this. Returned: %s" % arg)
 
 ######################################################################
 # Advanced
