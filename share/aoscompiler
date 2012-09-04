@@ -109,7 +109,7 @@ def run_vt_command(event):
 		Globals.TERM.feed_child('lunch geek_%s-userdebug\n' % d)
 	else:
 		return
-	Globals.TERM.feed_child('make -j%s %s\n' % (Globals.PROCESSORS, i))
+	Globals.TERM.feed_child('time make -j%s %s\n' % (Globals.PROCESSORS, i))
 
 def run_local_shell():
 	Globals.TERM.set_background_saturation(0.3)
